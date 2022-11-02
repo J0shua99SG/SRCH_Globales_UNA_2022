@@ -36,6 +36,16 @@ Route::get('/departamentos/eliminar{idDepartamento}', 'App\Controllers\Departame
 Route::post('/departamentos/eliminar/delete:{idDepartamento}', 'App\Controllers\DepartamentosController@delete')->name('departamentos.delete');
 
 
+//ROUTE HORARIOS
+Route::get('/horarios', 'App\Controllers\HorariosController@index')->name('horarios');
+Route::get('/horarios/create', 'App\Controllers\HorariosController@create')->name('horarios.create');
+Route::post('/horarios/guardar', 'App\Controllers\HorariosController@store')->name('horarios.guardar');
+Route::get('/horarios/details{idHorario}', 'App\Controllers\HorariosController@show')->name('horarios.show');
+Route::get('/horarios/{idHorario}', 'App\Controllers\HorariosController@edit')->name('horarios.edit');
+Route::post('/horarioscampus/update{idHorario}', 'App\Controllers\HorariosController@update')->name('horarios.update');
+Route::get('/horarios/eliminar{idHorario}', 'App\Controllers\HorariosController@eliminar')->name('horarios.eliminar');
+Route::post('/horarios/eliminar/delete:{idHorario}', 'App\Controllers\HorariosController@delete')->name('horarios.delete');
+
 Route::get('/', function () {
     return view('welcome');
 });
