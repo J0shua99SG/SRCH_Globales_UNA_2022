@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 
 class DepartamentosController extends Controller
 {
@@ -11,9 +12,12 @@ class DepartamentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
-        //
+        $departamento = DB::select("exec sp_getall_departamento");
+        return view('/departamento/index', compact('departamento'));
     }
 
     /**
@@ -23,7 +27,8 @@ class DepartamentosController extends Controller
      */
     public function create()
     {
-        //
+        $departamentos = DB::select("exec sp_getall_departamento");
+        return view('departamentos/create', compact('departamentos'));
     }
 
     /**
@@ -32,31 +37,31 @@ class DepartamentosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
     public function store(Request $request)
     {
-        //
+        $resultado = DB::update(
+            'exec sp_create_departamento ?',
+            array(
+                $request->pNombre,
+            )
+        );
+        return redirect()->route('departamentos')->with('primary', 'Departamento almacenado satisfactoriamente');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
+     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+
+    public function edit($idDepartamento)
     {
-        //
+        $intid = intval($idDepartamento);
+        $departamentos = DB::select("exec [sp_get_departamento_by_id] $intid");
+        return view('/departamentos/edit', compact("departamentos", "intid"));
     }
 
     /**
@@ -66,19 +71,52 @@ class DepartamentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    public function update(Request $request, $idDepartamento)
     {
-        //
+        $resultado = DB::update(
+            'exec sp_edit_departemento ?',
+            array(
+                $idDepartamento,
+                $request->pNombre,
+            )
+        );
+        return redirect()->route('departamentos')->with('success', 'Departamento actalizado satisfactoriamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+
+    public function eliminar($idDepartamento)
     {
-        //
+
+        $intid = intval($idDepartamento);
+        $departamentos = DB::select("exec [sp_get_departamento_by_id] $intid");
+
+        return view('/departamentos/delete', compact("departamentos", "intid"));
     }
+
+    public function delete(Request $request, $idDepartamento)
+    {
+        $resultado = DB::update(
+            'exec sp_delete_departamento ?',
+            array(
+                $idDepartamento,
+            )
+        );
+        return redirect()->route('departamentos')->with('danger', 'Departamento eliminado con exito');
+    }
+
+    public function details($idDepartamento)
+    {
+        $intid = intval($idDepartamento);
+        $campus = DB::select("exec [sp_get_departamento_by_id] $intid");
+
+        
+        return view('/departamentos/details', compact("departamentos", "intid"));
+    }
+
+
+
+
+
+   
 }
