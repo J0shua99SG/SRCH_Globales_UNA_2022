@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CampusController;
+use App\Http\Controllers\DepartamentosController;
+use App\Http\Controllers\HorariosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,16 +15,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 //ROUTE CAMPUS
-Route::get('/campus', 'App\Controllers\CampusController@index')->name('campus');
-Route::get('/campus/create', 'App\Controllers\CampusController@create')->name('campus.create');
-Route::post('/campus/guardar', 'App\Controllers\CampusController@store')->name('campus.guardar');
-Route::get('/campus/details{idCampus}', 'App\Controllers\CampusController@details')->name('campus.details');
-Route::get('/campus/{idCampus}', 'App\Controllers\CampusController@edit')->name('campus.edit');
-Route::post('/campus/update{idCampus}', 'App\Controllers\CampusController@update')->name('campus.update');
-Route::get('/campus/eliminar{idCampus}', 'App\Controllers\CampusController@eliminar')->name('campus.eliminar');
-Route::post('/campus/eliminar/delete:{idCampus}', 'App\Controllers\CampusController@delete')->name('campus.delete');
+Route::get('/campus', [CampusController::class, 'index'])->name('campus.index');
+Route::post('/campus/guardar', [CampusController::class, 'store'])->name('campus.guardar');
+Route::post('/campus/update', [CampusController::class, 'update'])->name('campus.update');
+Route::post('/campus/delete', [CampusController::class, 'delete'])->name('campus.delete');
+
+
+
 
 
 //ROUTE DEPARTAMENTOS
@@ -47,5 +48,5 @@ Route::get('/horarios/eliminar{idHorario}', 'App\Controllers\HorariosController@
 Route::post('/horarios/eliminar/delete:{idHorario}', 'App\Controllers\HorariosController@delete')->name('horarios.delete');
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layout.master');
 });

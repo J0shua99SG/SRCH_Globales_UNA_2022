@@ -16,7 +16,7 @@ class DepartamentosController extends Controller
 
     public function index()
     {
-        $departamento = DB::select("exec sp_getall_departamento");
+        $departamento = DB::select("call sp_getall_departamento");
         return view('/departamento/index', compact('departamento'));
     }
 
@@ -27,7 +27,7 @@ class DepartamentosController extends Controller
      */
     public function create()
     {
-        $departamentos = DB::select("exec sp_getall_departamento");
+        $departamentos = DB::select("call sp_getall_departamento");
         return view('departamentos/create', compact('departamentos'));
     }
 
@@ -60,7 +60,7 @@ class DepartamentosController extends Controller
     public function edit($idDepartamento)
     {
         $intid = intval($idDepartamento);
-        $departamentos = DB::select("exec [sp_get_departamento_by_id] $intid");
+        $departamentos = DB::select("call [sp_get_departamento_by_id] $intid");
         return view('/departamentos/edit', compact("departamentos", "intid"));
     }
 
@@ -89,7 +89,7 @@ class DepartamentosController extends Controller
     {
 
         $intid = intval($idDepartamento);
-        $departamentos = DB::select("exec [sp_get_departamento_by_id] $intid");
+        $departamentos = DB::select("call [sp_get_departamento_by_id] $intid");
 
         return view('/departamentos/delete', compact("departamentos", "intid"));
     }
@@ -108,7 +108,7 @@ class DepartamentosController extends Controller
     public function details($idDepartamento)
     {
         $intid = intval($idDepartamento);
-        $campus = DB::select("exec [sp_get_departamento_by_id] $intid");
+        $campus = DB::select("call [sp_get_departamento_by_id] $intid");
 
         
         return view('/departamentos/details', compact("departamentos", "intid"));

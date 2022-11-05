@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers;
@@ -20,40 +19,20 @@ class CampusController extends Controller
 
     public function index(Request $request)
     {
-        $campus = DB::select("exec sp_getall_campus");
+        $campus = DB::select("call sp_getall_campus");
         return view('/campus/index', compact('campus'));
-    }
-
-    public function create()
-    {
-        $campus = DB::select("exec sp_getall_campus");
-        return view('campus/create', compact('campus'));
     }
 
     public function store(Request $request)
     {
-        $resultado = DB::update(
-            'exec sp_create_campus ?, ?, ?, ?',
-            array(
-                $request->pNombre,
-                $request->pSede,
-                $request->pDireccion,
-                $request->pTelefono,
-            )
-        );
-        return redirect()->route('campus')->with('primary', 'Campus almacenado satisfactoriamente');
+        DB::select('call sp_create_campus(?,?,?,?)',array($request->pNombre,$request->pSede,$request->pDireccion,$request->pTelefono));
+
+        return response()->json(['success'=>'Campus registrado!']);
     }
 
-    public function edit($idCampus)
+    public function update(Request $request)
     {
-        $intid = intval($idCampus);
-        $campus = DB::select("exec [sp_get_campus_by_id] $intid");
-        return view('/campus/edit', compact("campus", "intid"));
-    }
-
-    public function update(Request $request, $idCampus)
-    {
-        $resultado = DB::update(
+        DB::update(
             'exec sp_edit_campus ?, ?, ?, ?',
             array(
                 $idCampus,
@@ -66,37 +45,11 @@ class CampusController extends Controller
         return redirect()->route('campus')->with('success', 'Campus actalizado satisfactoriamente');
     }
 
-    public function eliminar($idCampus)
+    public function delete(Request $request)
     {
+        DB::select('call sp_delete_campus(?)',array($request->idCampus));
 
-        $intid = intval($idCampus);
-        $campus = DB::select("exec [sp_get_campus_by_id] $intid");
-
-        return view('/campus/delete', compact("campus", "intid"));
+        return response()->json(['success'=>'Campus eliminado satisfactoriamente!']);
     }
 
-    public function delete(Request $request, $idCampus)
-    {
-        $resultado = DB::update(
-            'exec sp_delete_campus ?',
-            array(
-                $idCampus,
-            )
-        );
-        return redirect()->route('campus')->with('danger', 'Campus eliminado satisfactoriamente');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function details($idCampus)
-    {
-        $intid = intval($idCampus);
-        $campus = DB::select("exec [sp_get_campus_by_id] $intid");
-
-        return view('/campus/details', compact("campus", "intid"));
-    }
 }
