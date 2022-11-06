@@ -12,23 +12,10 @@ class DepartamentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-
     public function index()
     {
-        $departamento = DB::select("exec sp_getall_departamento");
-        return view('/departamento/index', compact('departamento'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $departamentos = DB::select("exec sp_getall_departamento");
-        return view('departamentos/create', compact('departamentos'));
+        $departamento = DB::select("call sp_getall_departamento");
+        return view('/departamentos/index', compact('departamento'));
     }
 
     /**
@@ -41,27 +28,10 @@ class DepartamentosController extends Controller
 
     public function store(Request $request)
     {
-        $resultado = DB::update(
-            'exec sp_create_departamento ?',
-            array(
-                $request->pNombre,
-            )
-        );
-        return redirect()->route('departamentos')->with('primary', 'Departamento almacenado satisfactoriamente');
-    }
 
-     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+        DB::select('call sp_create_departamento(?)',array($request->pNombre));
 
-    public function edit($idDepartamento)
-    {
-        $intid = intval($idDepartamento);
-        $departamentos = DB::select("exec [sp_get_departamento_by_id] $intid");
-        return view('/departamentos/edit', compact("departamentos", "intid"));
+        return response()->json(['success'=>'Departamento almacenado satisfactoriamente!']);
     }
 
     /**
@@ -72,51 +42,20 @@ class DepartamentosController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, $idDepartamento)
+    public function update(Request $request)
     {
-        $resultado = DB::update(
-            'exec sp_edit_departemento ?',
-            array(
-                $idDepartamento,
-                $request->pNombre,
-            )
-        );
-        return redirect()->route('departamentos')->with('success', 'Departamento actalizado satisfactoriamente');
+        DB::select('call sp_edit_departemento(?,?)',array($request->pIdDepartamento, $request->pNombre));
+
+        return response()->json(['success'=>'Departamento actalizado satisfactoriamente!']);
+
     }
 
 
-    public function eliminar($idDepartamento)
+    public function delete(Request $request)
     {
 
-        $intid = intval($idDepartamento);
-        $departamentos = DB::select("exec [sp_get_departamento_by_id] $intid");
+        DB::select('call sp_delete_departamento(?)',array($request->IdDepartamento));
 
-        return view('/departamentos/delete', compact("departamentos", "intid"));
+        return response()->json(['success'=>'Departamento eliminado con exito!']);
     }
-
-    public function delete(Request $request, $idDepartamento)
-    {
-        $resultado = DB::update(
-            'exec sp_delete_departamento ?',
-            array(
-                $idDepartamento,
-            )
-        );
-        return redirect()->route('departamentos')->with('danger', 'Departamento eliminado con exito');
-    }
-
-    public function details($idDepartamento)
-    {
-        $intid = intval($idDepartamento);
-        $campus = DB::select("exec [sp_get_departamento_by_id] $intid");
-
-        
-        return view('/departamentos/details', compact("departamentos", "intid"));
-    }
-
-
-
-
-
-   
 }
