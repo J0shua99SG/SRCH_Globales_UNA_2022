@@ -14,14 +14,9 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="/dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/campus">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Campus</span></a>
             </li>
 
             <!-- Divider -->
@@ -29,8 +24,13 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Navegación
             </div>
+            <li class="nav-item">
+                <a class="nav-link" href="/campus">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Campus</span></a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/departamentos">
                     <i class="fas fa-fw fa-table"></i>

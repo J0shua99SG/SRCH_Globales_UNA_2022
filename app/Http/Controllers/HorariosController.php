@@ -14,21 +14,16 @@ class HorariosController extends Controller
     public function index(Request $request)
     {
         $horario = DB::select("call sp_getall_horario");
-        return view('/horarios/index', compact('horario'));
+
+        $actividad = DB::select("call sp_getall_tabla_actividad");
+
+        $espacio = DB::select("call sp_getall_espacio");
+
+        $usuario = DB::select("call sp_getall_tabla_usuario");
+        
+        return view('/horarios/index', compact('horario','actividad', 'espacio', 'usuario'));
 
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $horarios = DB::select('CALL sp_getall_horario');
-        return view('horarios/create', compact('horario'));
-    }
-
     /**
      * Store a newly created resource in storage.
      * 
@@ -37,19 +32,11 @@ class HorariosController extends Controller
      */
     public function store(Request $request)
     {
-        $request = DB::insert('CALL sp_create_horario ?,?,?,?,?,?,?,?,?', array(
-            $request->pIdUsuario,
-            $request->pIdActividad,
-            $request->pIdEspacio,
-            $request->pHoraInicio,
-            $request->pHoraFinalizacion,
-            $request->pFechaInicio,
-            $request->pFechaFin,
-            $request->pDia,
-            $request->pEstado,
-            $request->pFechaActivacion,
-        ));
-        return redirect()->route('horarios')->with('primary', 'Horario almacenado correctamente');
+
+        DB::select('call sp_create_horario(?,?,?,?,?,?,?,?,?,?)',array($request->pIdUsuario,$request->pIdActividad,$request->pIdEspacio,$request->pHoraInicio,
+         $request->pHoraFinalizacion, $request->pFechaInicio, $request->pFechaFin, $request->pDia,$request->pEstado,$request->pFechaActivacion));
+
+        return response()->json(['success'=>'Horario almacenado correctamente!']);
     }
 
     /**

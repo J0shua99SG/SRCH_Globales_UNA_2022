@@ -35,7 +35,18 @@ Route::post('/horarios/guardar', [HorariosController::class, 'store'])->name('ho
 Route::post('/horarios/update', [HorariosController::class, 'update'])->name('horarios.update');
 Route::post('/horarios/delete', [HorariosController::class, 'delete'])->name('horarios.delete');
 
+Route::get('/dashboard', function () {
+    return view('pages.dashboard');
+});
 
 Route::get('/', function () {
-    return view('layout.master');
+    return view('pages.dashboard');
+});
+
+Route::get('/registro', function () {
+    return view('login.registro');
+});
+
+Route::get('/login', function () {
+    return view('login.sesion');
 });

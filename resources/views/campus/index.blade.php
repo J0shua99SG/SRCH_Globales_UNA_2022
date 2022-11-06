@@ -90,6 +90,7 @@
         </div>
         <!-- Modal-->
     </div>
+    
     <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
         integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
 
@@ -115,8 +116,6 @@
                 showConfirmButton: true,
             })
         }
-
-
         //Modal de guardar
         $('#crearCampus').click(function() {
             $('#tituloModal').text("Registrar Campus");
@@ -144,8 +143,8 @@
                     $('#formCampus').trigger("reset");
                     $('#ModalCampus').modal('hide');
                     swal_success();
-                    setTimeout(function() { // wait for 5 secs(2)
-                        location.reload(); // then reload the page.(3)
+                    setTimeout(function() {
+                        location.reload();
                     }, 2000);
                 },
                 error: function(data) {
@@ -219,8 +218,8 @@
                     $('#formCampus').trigger("reset");
                     $('#ModalCampus').modal('hide');
                     swal_success();
-                    setTimeout(function() { // wait for 5 secs(2)
-                        location.reload(); // then reload the page.(3)
+                    setTimeout(function() {
+                        location.reload();
                     }, 2000);
                 },
                 error: function(data) {
