@@ -16,6 +16,7 @@ use App\Http\Controllers\HorariosController;
 |
 */
 //ROUTE CAMPUS
+
 Route::get('/campus', [CampusController::class, 'index'])->name('campus.index');
 Route::post('/campus/guardar', [CampusController::class, 'store'])->name('campus.guardar');
 Route::post('/campus/update', [CampusController::class, 'update'])->name('campus.update');
@@ -34,6 +35,7 @@ Route::get('/horarios', [HorariosController::class, 'index'])->name('horarios.in
 Route::post('/horarios/guardar', [HorariosController::class, 'store'])->name('horarios.guardar');
 Route::post('/horarios/update', [HorariosController::class, 'update'])->name('horarios.update');
 Route::post('/horarios/delete', [HorariosController::class, 'delete'])->name('horarios.delete');
+
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard');

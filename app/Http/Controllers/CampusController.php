@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use DB;
 
@@ -12,7 +10,7 @@ class CampusController extends Controller
      *
      * @return void
      */
-    public function __construct()
+      public function __construct()
     {
         //$this->middleware('auth');
     }
@@ -45,3 +43,4 @@ class CampusController extends Controller
     }
 
 }
+
