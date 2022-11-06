@@ -4,7 +4,7 @@
 
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Campus</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Lista de Campus</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -24,19 +24,20 @@
                         </thead>
                         <tbody>
                             @foreach ($campus as $campu)
-                                <tr>
-                                    <td>{{ $campu->IdCampus }}</td>
-                                    <td>{{ $campu->Nombre }}</td>
-                                    <td>{{ $campu->Sede }}</td>
-                                    <td>{{ $campu->direccion }}</td>
-                                    <td>{{ $campu->Telefono }}</td>
+                                <tr id="row-{{ $campu->IdCampus }}">
+                                    <td id="id">{{ $campu->IdCampus }}</td>
+                                    <td id="Nombre">{{ $campu->Nombre }}</td>
+                                    <td id="Sede">{{ $campu->Sede }}</td>
+                                    <td id="Direccion">{{ $campu->direccion }}</td>
+                                    <td id="Telefono">{{ $campu->Telefono }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2" onclick="modalActualizar({{ $campu->IdCampus }})"><i
+                                        <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2"
+                                            onclick="modalActualizar({{ $campu->IdCampus }})"><i
                                                 class="fas fa-edit"></i></button>
                                         <button class="btn btn-sm btn-icon btn-outline-danger btn-circle mr-2"
                                             onclick="eliminar({{ $campu->IdCampus }})"><i
                                                 class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2"><i
+                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2" onclick="modalDetalle({{ $campu->IdCampus }})"><i
                                                 class="fas
                                             fa-eye"></i></button>
 
@@ -75,7 +76,7 @@
                                 <label for="">Teléfono del campus</label>
                                 <input type="number" name="pTelefono" class="form-control" id="pTelefono"
                                     placeholder="Escriba teléfono">
-                                <input type="hidden" name="id" id="id" value="">
+                                <input type="hidden" name="pIdCampus" id="pIdCampus" value="">
                             </div>
                         </form>
                     </div>
@@ -123,11 +124,14 @@
             $('#btnActualizar').hide();
             $('#formCampus').trigger("reset");
             $('#ModalCampus').modal('show');
+            $( "#pNombre" ).prop( "disabled", false );
+            $( "#pSede" ).prop( "disabled", false );
+            $( "#pDireccion" ).prop( "disabled", false );
+            $( "#pTelefono" ).prop( "disabled", false );
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
             e.preventDefault();
-            $(this).html('Save');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -140,7 +144,9 @@
                     $('#formCampus').trigger("reset");
                     $('#ModalCampus').modal('hide');
                     swal_success();
-                    windows.reload();
+                    setTimeout(function() { // wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 2000);
                 },
                 error: function(data) {
                     swal_error();
@@ -148,20 +154,95 @@
                 }
             });
         });
-        //Funcion del Modal Actualizar
-        function modalActualizar(campus){
-            console.log(campus);
+        //Funcion del Modal Detalles
+        function modalDetalle(IdCampus) {
+            //Capturamos los valores de la tabla
+            row_id = "row-"+IdCampus;
+            let nombre = $("#"+ row_id + " " + "#Nombre").text();
+            let sede = $("#"+ row_id + " " + "#Sede").text();
+            let direccion = $("#"+ row_id + " " + "#Direccion").text();
+            let telefono = $("#"+ row_id + " " + "#Telefono").text();
+
+            $('#tituloModal').text("Detalles del Campus");
+            $('#btnGuardar').hide();
+            $('#btnActualizar').hide();
+            $('#formCampus').trigger("reset");
+            $('#ModalCampus').modal('show');
+
+            $( "#pNombre" ).prop( "disabled", true );
+            $( "#pSede" ).prop( "disabled", true );
+            $( "#pDireccion" ).prop( "disabled", true );
+            $( "#pTelefono" ).prop( "disabled", true );
+
+            $('#pIdCampus').val(IdCampus);
+            $('#pNombre').val(nombre);
+            $('#pSede').val(sede);
+            $('#pDireccion').val(direccion);
+            $('#pTelefono').val(telefono);
         }
+        //Funcion del Modal Actualizar
+        function modalActualizar(IdCampus) {
+            //Capturamos los valores de la tabla
+            row_id = "row-"+IdCampus;
+            let nombre = $("#"+ row_id + " " + "#Nombre").text();
+            let sede = $("#"+ row_id + " " + "#Sede").text();
+            let direccion = $("#"+ row_id + " " + "#Direccion").text();
+            let telefono = $("#"+ row_id + " " + "#Telefono").text();
+
+            $('#tituloModal').text("Actualizar Campus");
+            $('#btnGuardar').hide();
+            $('#btnActualizar').show();
+            $('#formCampus').trigger("reset");
+            $('#ModalCampus').modal('show');
+            $( "#pNombre" ).prop( "disabled", false );
+            $( "#pSede" ).prop( "disabled", false );
+            $( "#pDireccion" ).prop( "disabled", false );
+            $( "#pTelefono" ).prop( "disabled", false );
+            $('#pIdCampus').val(IdCampus);
+            $('#pNombre').val(nombre);
+            $('#pSede').val(sede);
+            $('#pDireccion').val(direccion);
+            $('#pTelefono').val(telefono);
+        }
+        //Mandar a actualizar los datos
+        $('#btnActualizar').click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $('#formCampus').serialize(),
+                url: "{{ route('campus.update') }}",
+                type: "POST",
+                dataType: 'json',
+                success: function(data) {
+                    $('#formCampus').trigger("reset");
+                    $('#ModalCampus').modal('hide');
+                    swal_success();
+                    setTimeout(function() { // wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 2000);
+                },
+                error: function(data) {
+                    swal_error();
+                    $('#btnActualizar').html('Error');
+                }
+            });
+        });
+
+
+
+
         //Funcion para eliminar
         function eliminar(id) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Esta seguro?',
+                text: "Este acción no es reversible!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Si, eliminar!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -169,16 +250,21 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: "POST",
-                        data: {idCampus : id},
+                        data: {
+                            idCampus: id
+                        },
                         url: "{{ route('campus.delete') }}",
                         type: "POST",
                         dataType: 'json',
                         success: function(data) {
                             Swal.fire(
-                                'Deleted!',
-                                'Your file has been deleted.',
+                                'Eliminado!',
+                                'Se completo la acción',
                                 'success'
                             )
+                            setTimeout(function() { // wait for 5 secs(2)
+                                location.reload(); // then reload the page.(3)
+                            }, 2000)
                         },
                         error: function(data) {
                             swal_error();

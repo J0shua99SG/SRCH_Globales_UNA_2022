@@ -73,9 +73,7 @@
             </div>
         </div>
     </div>
-
-     <!-- SWEET ALERT 2-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.min.js" integrity="sha512-m5UMBsLgNwgf9KFah01eB3cGlhkP9ucYYavGAux0KtxDSl/chjvNxaMkW5zBKSbQtmgQggOtqfiBe5bQr9n5YQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="../../../vendor/jquery/jquery.min.js"></script>
     <script src="../../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

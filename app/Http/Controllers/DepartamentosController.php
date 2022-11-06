@@ -89,7 +89,7 @@ class DepartamentosController extends Controller
     {
 
         $intid = intval($idDepartamento);
-        $departamentos = DB::select("call [sp_get_departamento_by_id] $intid");
+        $departamentos = DB::select("exec [sp_get_departamento_by_id] $intid");
 
         return view('/departamentos/delete', compact("departamentos", "intid"));
     }

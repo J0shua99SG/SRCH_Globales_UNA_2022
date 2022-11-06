@@ -32,17 +32,11 @@ class CampusController extends Controller
 
     public function update(Request $request)
     {
-        DB::update(
-            'exec sp_edit_campus ?, ?, ?, ?',
-            array(
-                $idCampus,
-                $request->pNombre,
-                $request->pSede,
-                $request->pDireccion,
-                $request->pTelefono,
-            )
-        );
-        return redirect()->route('campus')->with('success', 'Campus actalizado satisfactoriamente');
+
+        DB::select('call sp_edit_campus(?,?,?,?,?)',array($request->pIdCampus, $request->pNombre,$request->pSede,$request->pDireccion,$request->pTelefono));
+
+        return response()->json(['success'=>'Campus actalizado satisfactoriamente!']);
+      //  return redirect()->route('campus')->with('success', 'Campus actalizado satisfactoriamente');
     }
 
     public function delete(Request $request)
