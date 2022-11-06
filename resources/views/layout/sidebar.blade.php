@@ -31,6 +31,16 @@
             <div class="sidebar-heading">
                 Interface
             </div>
+            <li class="nav-item">
+                <a class="nav-link" href="/departamentos">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Departamentos</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/horarios">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Horarios</span></a>
+            </li>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">

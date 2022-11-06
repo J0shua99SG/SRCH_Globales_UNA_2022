@@ -13,8 +13,9 @@ class HorariosController extends Controller
      */
     public function index(Request $request)
     {
-        $horarios = DB::select('CALL sp_getall_horario');
-        return view('horarios/index', compact('horario'));
+        $horario = DB::select("call sp_getall_horario");
+        return view('/horarios/index', compact('horario'));
+
     }
 
     /**

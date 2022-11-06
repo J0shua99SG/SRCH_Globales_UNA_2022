@@ -17,7 +17,7 @@ class DepartamentosController extends Controller
     public function index()
     {
         $departamento = DB::select("call sp_getall_departamento");
-        return view('/departamento/index', compact('departamento'));
+        return view('/departamentos/index', compact('departamento'));
     }
 
     /**
