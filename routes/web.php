@@ -37,6 +37,12 @@ Route::post('/horarios/update', [HorariosController::class, 'update'])->name('ho
 Route::post('/horarios/delete', [HorariosController::class, 'delete'])->name('horarios.delete');
 
 
+//ROUTE TIPO_ACTIVO
+Route::get('/tipoactivos', [TipoActivosController::class, 'index'])->name('tipoactivos.index');
+Route::post('/tipoactivos/guardar', [TipoActivosController::class, 'store'])->name('tipoactivos.guardar');
+Route::post('/tipoactivos/update', [TipoActivosController::class, 'update'])->name('tipoactivos.update'); 
+Route::post('/tipoactivos/delete', [TipoActivosController::class, 'delete'])->name('tipoactivos.delete');
+
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
 });
