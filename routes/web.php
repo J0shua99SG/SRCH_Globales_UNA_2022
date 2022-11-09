@@ -4,7 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CampusController;
 use App\Http\Controllers\DepartamentosController;
 use App\Http\Controllers\HorariosController;
-
+use App\Http\Controllers\EdificiosController;
+use App\Http\Controllers\TipoActivosController;
+use App\Http\Controllers\TipoEspacioController;
+use App\Http\Controllers\EspacioController;
+use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\ActivoController;
+use App\Http\Controllers\EspacioActivoController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,6 +48,48 @@ Route::get('/tipoactivos', [TipoActivosController::class, 'index'])->name('tipoa
 Route::post('/tipoactivos/guardar', [TipoActivosController::class, 'store'])->name('tipoactivos.guardar');
 Route::post('/tipoactivos/update', [TipoActivosController::class, 'update'])->name('tipoactivos.update'); 
 Route::post('/tipoactivos/delete', [TipoActivosController::class, 'delete'])->name('tipoactivos.delete');
+
+
+//ROUTE EDIFICIOS
+Route::get('/edificios', [EdificiosController::class, 'index'])->name('edificios.index');
+Route::post('/edificios/guardar', [EdificiosController::class, 'store'])->name('edificios.guardar');
+Route::post('/edificios/update', [EdificiosController::class, 'update'])->name('edificios.update'); 
+Route::post('/edificios/delete', [EdificiosController::class, 'delete'])->name('edificios.delete');
+
+//ROUTE TIPOESPACIOS
+Route::get('/tipoespacios', [TipoEspacioController::class, 'index'])->name('tipoespacios.index');
+Route::post('/tipoespacios/guardar', [TipoEspacioController::class, 'store'])->name('tipoespacios.guardar');
+Route::post('/tipoespacios/update', [TipoEspacioController::class, 'update'])->name('tipoespacios.update'); 
+Route::post('/tipoespacios/delete', [TipoEspacioController::class, 'delete'])->name('tipoespacios.delete');
+
+
+//ROUTE ESPACIOS
+Route::get('/espacios', [EspacioController::class, 'index'])->name('espacios.index');
+Route::post('/espacios/guardar', [EspacioController::class, 'store'])->name('espacios.guardar');
+Route::post('/espacios/update', [EspacioController::class, 'update'])->name('espacios.update'); 
+Route::post('/espacios/delete', [EspacioController::class, 'delete'])->name('espacios.delete');
+
+//ROUTE ACTIVIDAD
+Route::get('/actividad', [ActividadController::class, 'index'])->name('actividad.index');
+Route::post('/actividad/guardar', [ActividadController::class, 'store'])->name('actividad.guardar');
+Route::post('/actividad/update', [ActividadController::class, 'update'])->name('actividad.update'); 
+Route::post('/actividad/delete', [ActividadController::class, 'delete'])->name('actividad.delete');
+
+
+//ROUTE ACTIVOS
+Route::get('/activo', [ActivoController::class, 'index'])->name('activo.index');
+Route::post('/activo/guardar', [ActivoController::class, 'store'])->name('activo.guardar');
+Route::post('/activo/update', [ActivoController::class, 'update'])->name('activo.update'); 
+Route::post('/activo/delete', [ActivoController::class, 'delete'])->name('activo.delete');
+
+
+//ROUTE ESPACIO ACTIVOS
+Route::get('/espacioactivos', [EspacioActivoController::class, 'index'])->name('espacioactivos.index');
+Route::post('/espacioactivos/guardar', [EspacioActivoController::class, 'store'])->name('espacioactivos.guardar');
+Route::post('/espacioactivos/update', [EspacioActivoController::class, 'update'])->name('espacioactivos.update'); 
+Route::post('/espacioactivos/delete', [EspacioActivoController::class, 'delete'])->name('espacioactivos.delete');
+
+
 
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
