@@ -11,6 +11,11 @@ use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\ActivoController;
 use App\Http\Controllers\EspacioActivoController;
+use App\Http\Controllers\UsuariosController;
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -89,6 +94,12 @@ Route::post('/espacioactivos/guardar', [EspacioActivoController::class, 'store']
 Route::post('/espacioactivos/update', [EspacioActivoController::class, 'update'])->name('espacioactivos.update'); 
 Route::post('/espacioactivos/delete', [EspacioActivoController::class, 'delete'])->name('espacioactivos.delete');
 
+
+//ROUTE USUARIOS
+Route::get('/usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
+Route::post('/usuarios/guardar', [UsuariosController::class, 'store'])->name('usuarios.guardar');
+Route::post('/usuarios/update', [UsuariosController::class, 'update'])->name('usuarios.update'); 
+Route::post('/usuarios/delete', [UsuariosController::class, 'delete'])->name('usuarios.delete');
 
 
 Route::get('/dashboard', function () {
