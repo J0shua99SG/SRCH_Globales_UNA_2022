@@ -12,6 +12,7 @@ use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\ActivoController;
 use App\Http\Controllers\EspacioActivoController;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\DashboardController;
 
 
 
@@ -100,10 +101,7 @@ Route::post('/usuarios/guardar', [UsuariosController::class, 'store'])->name('us
 Route::post('/usuarios/update', [UsuariosController::class, 'update'])->name('usuarios.update'); 
 Route::post('/usuarios/delete', [UsuariosController::class, 'delete'])->name('usuarios.delete');
 
-
-Route::get('/dashboard', function () {
-    return view('pages.dashboard');
-});
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::get('/', function () {
     return view('pages.dashboard');

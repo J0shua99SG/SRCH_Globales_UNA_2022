@@ -184,7 +184,8 @@
             $("#pNombre").prop("disabled", false);
             $("#pPlanta").prop("disabled", false);
             $("#pCapacidadMax").prop("disabled", false);
-            $("#pEstado").prop("disabled", false);
+            $("#pEstadoEspacio1").prop("disabled", false);
+            $("#pEstadoEspacio0").prop("disabled", false);
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
@@ -207,7 +208,6 @@
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnGuardar').html('Error');
                 }
             });
         });
@@ -266,6 +266,7 @@
             let CapacidadMAx = $("#" + row_id + " " + "#CapacidadMAx").text();
             let Estado = $("#" + row_id + " " + "#Estado").text();
 
+
             $('#tituloModal').text("Actualizar Espacio");
             $('#btnGuardar').hide();
             $('#btnActualizar').show();
@@ -289,12 +290,11 @@
             $('#pPlanta').val(Planta);
             $('#pCapacidadMax').val(CapacidadMAx);
             if(Estado == "Habilitado"){
-                $("#pEstado1").prop("checked", true);
+                $("#pEstadoEspacio1").prop("checked", true);
             }
             if(Estado == "Desabilitado"){
-                $("#pEstado0").prop("checked", true);
+                $("#pEstadoEspacio0").prop("checked", true);
             }
-
         }
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {

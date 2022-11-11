@@ -137,7 +137,7 @@
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnGuardar').html('Error');
+                //    $('#btnGuardar').html('Error');
                 }
             });
         });
@@ -203,7 +203,7 @@
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnActualizar').html('Error');
+                //    $('#btnActualizar').html('Error');
                 }
             });
         });

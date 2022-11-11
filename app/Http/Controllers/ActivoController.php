@@ -17,8 +17,10 @@ class ActivoController extends Controller
 
     public function index(Request $request)
     {
-        $activos = DB::select("call sp_getall_tabla_activo");
-        return view('/activo/index', compact('activo'));
+        $activo = DB::select("call sp_getall_tabla_activo");
+        $tipoactivos = DB::select("call sp_getall_tipo_activo");
+        
+        return view('/activo/index', compact('activo','tipoactivos'));
     }
 
     public function store(Request $request)

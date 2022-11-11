@@ -14,7 +14,7 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Id Tipo Espacio</th>
+                                <th>Id Espacio Activo</th>
                                 <th>Espacio</th>
                                 <th>Activo</th>
                                 <th>Cantidad</th>
@@ -74,14 +74,14 @@
                             <div class="form-group">
                                 <label for="">Espacio</label>
                                 <select class="form-control" name="pIdEspacio" id="pIdEspacio">
-                                    <option value="1">Seleccionar espacio</option>
+                                    <option value="0">Seleccionar espacio</option>
                                     @foreach ($espacios as $espacio)
                                         <option value="{{ $espacio->IdEspacio }}">{{ $espacio->Nombre }}</option>
                                     @endforeach
                                 </select>
                                 <label for="">Activo</label>
                                 <select class="form-control" name="pIdActivo" id="pIdActivo">
-                                    <option value="1">Seleccionar activo</option>
+                                    <option value="0">Seleccionar activo</option>
                                     @foreach ($activos as $activo)
                                         <option value="{{ $activo->IdActivo }}">{{ $activo->Nombre }}</option>
                                     @endforeach
@@ -161,7 +161,7 @@
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnGuardar').html('Error');
+                  //  $('#btnGuardar').html('Error');
                 }
             });
         });
@@ -172,6 +172,9 @@
             let IdEspacio = $("#"+ row_id + " " + "#IdEspacio").val();
             let IdActivo = $("#"+ row_id + " " + "#IdActivo").val();
             let Cantidad = $("#"+ row_id + " " + "#Cantidad").text();
+            console.log("Espacio " + IdEspacio);
+            console.log("Activo " + IdActivo);
+
 
             $('#tituloModal').text("Detalles de espacio activo");
             $('#btnGuardar').hide();
@@ -201,9 +204,9 @@
             $('#btnActualizar').show();
             $('#formEspacioActivo').trigger("reset");
             $('#ModalEspacioActivo').modal('show');
-            $( "#pIdEspacio" ).prop( "disabled", true );
-            $( "#pIdActivo" ).prop( "disabled", true );
-            $( "#pCantidad" ).prop( "disabled", true );
+            $( "#pIdEspacio" ).prop( "disabled", false );
+            $( "#pIdActivo" ).prop( "disabled", false );
+            $( "#pCantidad" ).prop( "disabled", false );
 
             $('#pIdEspacioActivo').val(IdEspacio_activo);
             $('#pIdEspacio').val(IdEspacio);
@@ -231,7 +234,7 @@
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnActualizar').html('Error');
+                //    $('#btnActualizar').html('Error');
                 }
             });
         });

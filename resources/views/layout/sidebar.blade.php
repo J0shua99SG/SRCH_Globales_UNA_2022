@@ -67,14 +67,14 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
             <li class="nav-item">
+                <a class="nav-link" href="/activo">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Activo</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/tipoactivos">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tipo Activos</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/espacioactivos">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Espacio Activos</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/horarios">

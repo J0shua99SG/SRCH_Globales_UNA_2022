@@ -3,41 +3,41 @@
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Lista de edificios</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Lista de activos</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <div class="d-flex flex-row-reverse" style="margin: 5px 0px;"><button
-                        class="btn btn-sm btn-pill btn-outline-primary font-weight-bolder" id="crearEdificio"><i
-                            class="fas fa-plus"></i>Agregar edificio</button></div>
+                        class="btn btn-sm btn-pill btn-outline-primary font-weight-bolder" id="crearActivo"><i
+                            class="fas fa-plus"></i>Agregar activo</button></div>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Id Edificio</th>
-                            <th>Campus</th>
+                            <th>Id Activo</th>
+                            <th>Tipo Activo</th>
                             <th>Nombre</th>
                             <th>Funciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($edificios as $edificio)
-                            <tr id="row-{{ $edificio->IdEdificio }}">
-                                <td id="id">{{ $edificio->IdEdificio }}</td>
-                                @foreach ($campus as $campu)
-                                @if ($edificio->IdCampus == $campu->IdCampus)
-                                <td >{{ $campu->Nombre }}
-                                <input type="hidden" id="IdCampus" value="{{$edificio->IdCampus}}"></td>
+                        @foreach ($activo as $activos)
+                            <tr id="row-{{ $activos->IdActivo }}">
+                                <td id="id">{{ $activos->IdActivo }}</td>
+                                @foreach ($tipoactivos as $tipoactivo)
+                                @if ($activos->IdTipoActivo == $tipoactivo->IdTipoActivo)
+                                <td >{{ $tipoactivo->Nombre }}
+                                <input type="hidden" id="IdTipoActivo" value="{{$tipoactivo->IdTipoActivo}}"></td>
                                 @endif
                                 @endforeach
-                                <td id="Nombre">{{ $edificio->Nombre }}</td>
+                                <td id="Nombre">{{ $activos->Nombre }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2"
-                                        onclick="modalActualizar({{ $edificio->IdEdificio }})"><i
+                                        onclick="modalActualizar({{ $activos->IdActivo }})"><i
                                             class="fas fa-edit"></i></button>
                                     <button class="btn btn-sm btn-icon btn-outline-danger btn-circle mr-2"
-                                        onclick="eliminar({{ $edificio->IdEdificio }})"><i
+                                        onclick="eliminar({{ $activos->IdActivo }})"><i
                                             class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2" onclick="modalDetalle({{ $edificio->IdEdificio }})"><i
+                                    <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2" onclick="modalDetalle({{ $activos->IdActivo }})"><i
                                             class="fas
                                         fa-eye"></i></button>
 
@@ -51,7 +51,7 @@
     </div>
     
     <!-- Modal-->
-    <div class="modal fade" id="ModalEdificio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="ModalActivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -62,18 +62,19 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formEdificio" name="formEdificio">
+                <form id="formActivo" name="formActivo">
                     <div class="form-group">
-                        <select class="form-control" name="pIdCampus" id="pIdCampus">
-                            <option value="1">Seleccionar campus</option>
-                            @foreach ($campus as $campu)
-                                <option value="{{ $campu->IdCampus }}">{{ $campu->Nombre }}</option>
+                        <label for="">Tipo del activo</label>
+                        <select class="form-control" name="pIdTipoActivo" id="pIdTipoActivo">
+                            <option value="1">Seleccionar tipo activo</option>
+                            @foreach ($tipoactivos as $tipoactivo)
+                                <option value="{{ $tipoactivo->IdTipoActivo }}">{{ $tipoactivo->Nombre }}</option>
                             @endforeach
                         </select>
-                        <label for="">Nombre del edificio</label>
+                        <label for="">Nombre del activo</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
                             placeholder="Escriba el nombre">
-                        <input type="hidden" name="pIdEdificio" id="pIdEdificio" value="">
+                        <input type="hidden" name="pIdActivo" id="pIdActivo" value="">
                     </div>
                 </form>
             </div>
@@ -87,6 +88,9 @@
 </div>
 <!-- Modal-->
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
+integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
 integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
@@ -114,14 +118,14 @@ function swal_error() {
     })
 }
 //Modal de guardar
-$('#crearEdificio').click(function() {
-    $('#tituloModal').text("Registrar Edificio");
+$('#crearActivo').click(function() {
+    $('#tituloModal').text("Registrar Activo");
     $('#btnGuardar').show();
     $('#btnActualizar').hide();
-    $('#formEdificio').trigger("reset");
-    $('#ModalEdificio').modal('show');
+    $('#formActivo').trigger("reset");
+    $('#ModalActivo').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
-    $( "#pIdCampus" ).prop( "disabled", false );
+    $( "#pIdTipoActivo" ).prop( "disabled", false );
 });
 //Mandar a guardar los datos
 $('#btnGuardar').click(function(e) {
@@ -130,13 +134,13 @@ $('#btnGuardar').click(function(e) {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        data: $('#formEdificio').serialize(),
-        url: "{{ route('edificios.guardar') }}",
+        data: $('#formActivo').serialize(),
+        url: "{{ route('activo.guardar') }}",
         type: "POST",
         dataType: 'json',
         success: function(data) {
-            $('#formEdificio').trigger("reset");
-            $('#ModalEdificio').modal('hide');
+            $('#formActivo').trigger("reset");
+            $('#ModalActivo').modal('hide');
             swal_success();
             setTimeout(function() {
                 location.reload();
@@ -144,47 +148,48 @@ $('#btnGuardar').click(function(e) {
         },
         error: function(data) {
             swal_error();
+          //  $('#btnGuardar').html('Error');
         }
     });
 });
 //Funcion del Modal Detalles
-function modalDetalle(IdEdificio) {
+function modalDetalle(IdActivo) {
     //Capturamos los valores de la tabla
-    row_id = "row-"+IdEdificio;
-    let campus = $("#"+ row_id + " " + "#IdCampus").val();
+    row_id = "row-"+IdActivo;
+    let idTipoActivo = $("#"+ row_id + " " + "#IdTipoActivo").val();
     let nombre = $("#"+ row_id + " " + "#Nombre").text();
 
-    $('#tituloModal').text("Detalles del Edificio");
+    $('#tituloModal').text("Detalles del Activo");
     $('#btnGuardar').hide();
     $('#btnActualizar').hide();
-    $('#formEdificio').trigger("reset");
-    $('#ModalEdificio').modal('show');
+    $('#formActivo').trigger("reset");
+    $('#ModalActivo').modal('show');
 
     $( "#pNombre" ).prop( "disabled", true );
-    $( "#pIdCampus" ).prop( "disabled", true );
+    $( "#pIdTipoActivo" ).prop( "disabled", true );
 
-    $('#pIdEdificio').val(IdEdificio);
+    $('#pIdEdificio').val(IdActivo);
     $('#pNombre').val(nombre);
-    $('#pIdCampus').val(campus);
+    $("#pIdTipoActivo").val(idTipoActivo);
 
 }
 //Funcion del Modal Actualizar
-function modalActualizar(IdEdificio) {
+function modalActualizar(IdActivo) {
     //Capturamos los valores de la tabla
-    row_id = "row-"+IdEdificio;
-    let campus = $("#"+ row_id + " " + "#IdCampus").val();
+    row_id = "row-"+IdActivo;
+    let idTipoActivo = $("#"+ row_id + " " + "#IdTipoActivo").val();
     let nombre = $("#"+ row_id + " " + "#Nombre").text();
 
-    $('#tituloModal').text("Actualizar Edificio");
+    $('#tituloModal').text("Actualizar Activo");
     $('#btnGuardar').hide();
     $('#btnActualizar').show();
-    $('#formEdificio').trigger("reset");
-    $('#ModalEdificio').modal('show');
+    $('#formActivo').trigger("reset");
+    $('#ModalActivo').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
-    $( "#pIdCampus" ).prop( "disabled", false );
-    $('#pIdEdificio').val(IdEdificio);
+    $( "#pIdTipoActivo" ).prop( "disabled", false );
+    $('#pIdActivo').val(IdActivo);
     $('#pNombre').val(nombre);
-    $('#pIdCampus').val(campus);
+    $("#pIdTipoActivo").val(idTipoActivo);
 }
 //Mandar a actualizar los datos
 $('#btnActualizar').click(function(e) {
@@ -193,13 +198,13 @@ $('#btnActualizar').click(function(e) {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        data: $('#formEdificio').serialize(),
-        url: "{{ route('edificios.update') }}",
+        data: $('#formActivo').serialize(),
+        url: "{{ route('activo.update') }}",
         type: "POST",
         dataType: 'json',
         success: function(data) {
-            $('#formEdificio').trigger("reset");
-            $('#ModalEdificio').modal('hide');
+            $('#formActivo').trigger("reset");
+            $('#ModalActivo').modal('hide');
             swal_success();
             setTimeout(function() {
                 location.reload();
@@ -207,6 +212,7 @@ $('#btnActualizar').click(function(e) {
         },
         error: function(data) {
             swal_error();
+           // $('#btnActualizar').html('Error');
         }
     });
 });
@@ -232,9 +238,9 @@ function eliminar(id) {
                 },
                 type: "POST",
                 data: {
-                    pIdEdificio: id
+                    pIdActivo: id
                 },
-                url: "{{ route('edificios.delete') }}",
+                url: "{{ route('activo.delete') }}",
                 type: "POST",
                 dataType: 'json',
                 success: function(data) {
