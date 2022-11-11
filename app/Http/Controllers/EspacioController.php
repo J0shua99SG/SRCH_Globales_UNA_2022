@@ -18,7 +18,11 @@ class EspacioController extends Controller
     public function index(Request $request)
     {
         $espacios = DB::select("call sp_getall_espacio");
-        return view('/espacios/index', compact('espacios'));
+        $edificios = DB::select("call sp_getall_edificio");
+        $tipoespacios = DB::select("call sp_getall_tipo_espacio");
+        $departamento = DB::select("call sp_getall_departamento");
+
+        return view('/espacios/index', compact('espacios','edificios','tipoespacios','departamento'));
     }
 
     public function store(Request $request)
@@ -32,7 +36,7 @@ class EspacioController extends Controller
 
     public function update(Request $request)
     {
-        DB::select('call sp_edit_edificio(?,?,?,?,?,?,?,?)',
+        DB::select('call sp_edit_espacio(?,?,?,?,?,?,?,?)',
             array($request->pIdEspacio,$request->pIdEdificio,$request->pIdTipoEspacio,
                   $request->pIdDepartamento,$request->pNombre,
                   $request->pPlanta,$request->pCapacidadMax,

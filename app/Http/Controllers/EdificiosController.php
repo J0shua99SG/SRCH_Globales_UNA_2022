@@ -18,7 +18,9 @@ class EdificiosController extends Controller
     public function index(Request $request)
     {
         $edificios = DB::select("call sp_getall_edificio");
-        return view('/edificios/index', compact('edificios'));
+        $campus = DB::select("call sp_getall_campus");
+
+        return view('/edificios/index', compact('edificios', 'campus'));
     }
 
     public function store(Request $request)

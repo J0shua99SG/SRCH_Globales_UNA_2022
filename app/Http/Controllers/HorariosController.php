@@ -40,51 +40,20 @@ class HorariosController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($idHorario)
-    {
-        $horarios = DB::select('CALL sp_get_horario_by_id ?', array($idHorario));
-        return view('/horarios/details', compact("horario"));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($idHorario)
-    {
-        $horarios = DB::select('CALL sp_get_horario_by_id ?', array($idHorario));
-        return view('/horarios/edit', compact("horario"));
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $idHorario)
+    public function update(Request $request)
     {
-        $request = DB::update('CALL sp_update_horario ?,?,?,?,?,?,?,?,?', array(
-            $request->pIdUsuario,
-            $request->pIdActividad,
-            $request->pIdEspacio,
-            $request->pHoraInicio,
-            $request->pHoraFinalizacion,
-            $request->pFechaInicio,
-            $request->pFechaFin,
-            $request->pDia,
-            $request->pEstado,
-            $request->pFechaActivacion,
-        ));
-        return redirect()->route('horarios')->with('primary', 'Horario actualizado correctamente');
+
+        DB::select('call sp_edit_horario(?,?,?,?,?,?,?,?,?,?,?)',array($request->pIdHorario, $request->pIdUsuario,$request->pIdActividad,$request->pIdEspacio,$request->pHoraInicio,
+         $request->pHoraFinalizacion, $request->pFechaInicio, $request->pFechaFin, $request->pDia,$request->pEstado,$request->pFechaActivacion));
+
+        return response()->json(['success'=>'Horario actualizado correctamente!']);
+
     }
 
     /**
@@ -93,16 +62,12 @@ class HorariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
-    public function eliminar($idHorario)
+
+    public function delete(Request $request)
     {
-        $horarios = DB::select('CALL sp_get_horario_by_id ?', array($idHorario));
-        return view('/horarios/delete', compact("horario"));
-    }
-     
-    public function delete(Request $request, $idHorario)
-    {
-        $request = DB::delete('CALL sp_delete_horario ?', array($idHorario));
-        return redirect()->route('horarios')->with('primary', 'Horario eliminado correctamente');
+        DB::select('call sp_delete_horario(?)',array($request->pIdHorario));
+
+       return response()->json(['success'=>'Horario eliminado correctamente!']);
+
     }
 }

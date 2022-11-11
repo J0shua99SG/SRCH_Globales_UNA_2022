@@ -18,7 +18,10 @@ class EspacioActivoController extends Controller
     public function index(Request $request)
     {
         $espacioactivos = DB::select("call sp_getall_espacio_activo");
-        return view('/espacioactivos/index', compact('espacioactivos'));
+        $espacios = DB::select("call sp_getall_espacio");
+        $tipoactivos = DB::select("call sp_getall_tipo_activo");
+       // dd($espacioactivos);
+        return view('/espacioactivos/index', compact('espacioactivos', 'espacios', 'tipoactivos'));
     }
 
     public function store(Request $request)

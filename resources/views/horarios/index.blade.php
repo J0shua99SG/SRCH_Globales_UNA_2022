@@ -28,17 +28,20 @@
                         </thead>
                         <tbody>
                             @foreach ($horario as $horarios)
-                                <tr id="row-{{ $horarios->Nombre }}">
+                                <tr id="row-{{ $horarios->IdHorario }}">
                                     <td id="id">{{ $horarios->IdHorario }}</td>
-                                    <td id="id">{{ $horarios->Nombre }}</td>
+                                    <td id="nombre">{{ $horarios->Nombre }}</td>
                                     @foreach ($actividad as $actividades)
                                     @if ($horarios->IdActividad == $actividades->IdActividad)
-                                    <td id="IdActividad">{{ $actividades->Nombre }}</td>
+                                    <td >{{ $actividades->Nombre }}
+                                    <input type="hidden" id="IdActividad" value="{{$horarios->IdActividad}}"></td>
                                     @endif
                                     @endforeach
+
                                     @foreach ($espacio as $espacios)
                                     @if ($horarios->IdEspacio == $espacios->IdEspacio)
-                                    <td id="IdEspacio">{{ $espacios->Nombre }}</td>
+                                    <td>{{ $espacios->Nombre }}
+                                        <input type="hidden" id="IdEspacio" value="{{$horarios->IdEspacio}}"></td>
                                     @endif
                                     @endforeach
                                     <td id="HoraInicio">{{ $horarios->HoraInicio }}</td>
@@ -46,7 +49,12 @@
                                     <td id="FechaInicio">{{ $horarios->FechaInicio }}</td>
                                     <td id="FechaFin">{{ $horarios->FechaFin }}</td>
                                     <td id="Dia">{{ $horarios->Dia }}</td>
-                                    <td id="Estado">{{ $horarios->Estado }}</td>
+                                    @if ($horarios->Estado ==1)
+                                    <td id="Estado"  value="{{$horarios->Estado}}">Habilitado</td>
+                                    @endif
+                                    @if ($horarios->Estado == 0)
+                                    <td id="Estado" value="{{$horarios->Estado}}">Desabilitado</td>
+                                    @endif
                                     <td>
                                         <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2"
                                             onclick="modalActualizar({{ $horarios->IdHorario }})"><i
@@ -125,10 +133,10 @@
                                 <label for="">Estado</label>
                                 <div style="display: flex; justify-content: space-around;">
                                     <div>
-                                     <span>habilitado </span><input type="radio" class="form-control" id="pEstado" name="pEstado" value="1" checked>
+                                     <span>habilitado </span><input type="radio" class="form-control" id="pEstado1" name="pEstado" value="1">
                                     </div>
                                     <div>
-                                        <span>Desabilitado</span><input type="radio" class="form-control" id="pEstado" name="pEstado" value="0">
+                                        <span>Desabilitado</span><input type="radio" class="form-control" id="pEstado0" name="pEstado" value="0">
                                     </div>
 
                                 </div>
@@ -179,7 +187,16 @@
             $('#btnActualizar').hide();
             $('#formHorario').trigger("reset");
             $('#ModalHorario').modal('show');
-            $("#pNombre").prop("disabled", false);
+            $("#pIdUsuario").prop("disabled", false);
+            $("#pIdActividad").prop("disabled", false);
+            $("#pIdEspacio").prop("disabled", false);
+            $("#pHoraInicio").prop("disabled", false);
+            $("#pHoraFinalizacion").prop("disabled", false);
+            $("#pFechaInicio").prop("disabled", false);
+            $("#pFechaFin").prop("disabled", false);
+            $("#pFechaActivacion").prop("disabled", false);
+            $("#pDia").prop("disabled", false);
+            $("#pEstado").prop("disabled", false);
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
@@ -210,34 +227,98 @@
         function modalDetalle(IdHorario) {
             //Capturamos los valores de la tabla
             row_id = "row-" + IdHorario;
-            let nombre = $("#" + row_id + " " + "#Nombre").text();
-
+            let usuario = $("#" + row_id + " " + "#nombre").text();
+            let actividad = $("#" + row_id + " " + "#IdActividad").val();
+            let espacio = $("#" + row_id + " " + "#IdEspacio").val();
+            let horaInicio = $("#" + row_id + " " + "#HoraInicio").text();
+            let horaFinalizacion = $("#" + row_id + " " + "#HoraFinalizacion").text();
+            let fechaInicio = $("#" + row_id + " " + "#FechaInicio").text();
+            let fechaFin = $("#" + row_id + " " + "#FechaFin").text();
+//            let fechaActivacion = $("#" + row_id + " " + "#pFechaActivacion").text();
+            let dia = $("#" + row_id + " " + "#Dia").text();
+            let estado = $("#" + row_id + " " + "#Estado").text();
             $('#tituloModal').text("Detalles del Horario");
             $('#btnGuardar').hide();
             $('#btnActualizar').hide();
             $('#formHorario').trigger("reset");
             $('#ModalHorario').modal('show');
 
-            $("#pNombre").prop("disabled", true);
-            $('#pIdHorario').val(IdHorario);
-            $('#pNombre').val(nombre);
+            $("#pIdUsuario").prop("disabled", true);
+            $("#pIdActividad").prop("disabled", true);
+            $("#pIdEspacio").prop("disabled", true);
+            $("#pHoraInicio").prop("disabled", true);
+            $("#pHoraFinalizacion").prop("disabled", true);
+            $("#pFechaInicio").prop("disabled", true);
+            $("#pFechaFin").prop("disabled", true);
+            $("#pFechaActivacion").prop("disabled", true);
+            $("#pDia").prop("disabled", true);
+            $("#pEstado1").prop("disabled", true);
+            $("#pEstado0").prop("disabled", true);
+            $('#pIdUsuario').val(usuario);
+            $("#pIdActividad").val(actividad);
+            $('#pIdEspacio').val(espacio);
+            $('#pHoraInicio').val(horaInicio);
+            $('#pHoraFinalizacion').val(horaFinalizacion);
+            $('#pFechaInicio').val(fechaInicio);
+            $('#pFechaFin').val(fechaFin);
+ //           $('#pFechaActivacion').val(fechaActivacion);
+            $('#pDia').val(dia);
+            if(estado == "Habilitado"){
+                $("#pEstado1").prop("checked", true);
+            }
+            if(estado == "Desabilitado"){
+                $("#pEstado0").prop("checked", true);
+            }
 
         }
         //Funcion del Modal Actualizar
         function modalActualizar(IdHorario) {
             //Capturamos los valores de la tabla
             row_id = "row-" + IdHorario;
-            let nombre = $("#" + row_id + " " + "#Nombre").text();
-
-
-            $('#tituloModal').text("Actualizar Departamento");
+            let usuario = $("#" + row_id + " " + "#nombre").text();
+            let actividad = $("#" + row_id + " " + "#IdActividad").val();
+            let espacio = $("#" + row_id + " " + "#IdEspacio").val();
+            let horaInicio = $("#" + row_id + " " + "#HoraInicio").text();
+            let horaFinalizacion = $("#" + row_id + " " + "#HoraFinalizacion").text();
+            let fechaInicio = $("#" + row_id + " " + "#FechaInicio").text();
+            let fechaFin = $("#" + row_id + " " + "#FechaFin").text();
+//            let fechaActivacion = $("#" + row_id + " " + "#pFechaActivacion").text();
+            let dia = $("#" + row_id + " " + "#Dia").text();
+            let estado = $("#" + row_id + " " + "#Estado").text();
+            $('#tituloModal').text("Actualizar Horario");
             $('#btnGuardar').hide();
             $('#btnActualizar').show();
             $('#formHorario').trigger("reset");
             $('#ModalHorario').modal('show');
-            $("#pNombre").prop("disabled", false);
+
+            $("#pIdUsuario").prop("disabled", false);
+            $("#pIdActividad").prop("disabled", false);
+            $("#pIdEspacio").prop("disabled", false);
+            $("#pHoraInicio").prop("disabled", false);
+            $("#pHoraFinalizacion").prop("disabled", false);
+            $("#pFechaInicio").prop("disabled", false);
+            $("#pFechaFin").prop("disabled", false);
+            $("#pFechaActivacion").prop("disabled", false);
+            $("#pDia").prop("disabled", false);
+            $("#pEstado1").prop("disabled", false);
+            $("#pEstado0").prop("disabled", false);
+            $('#pIdUsuario').val(1);
+            $("#pIdActividad").val(actividad);
+            $('#pIdEspacio').val(espacio);
+            $('#pHoraInicio').val(horaInicio);
+            $('#pHoraFinalizacion').val(horaFinalizacion);
+            $('#pFechaInicio').val(fechaInicio);
+            $('#pFechaFin').val(fechaFin);
+ //           $('#pFechaActivacion').val(fechaActivacion);
+            $('#pDia').val(dia);
+            if(estado == "Habilitado"){
+                $("#pEstado1").prop("checked", true);
+            }
+            if(estado == "Desabilitado"){
+                $("#pEstado0").prop("checked", true);
+            }
             $('#pIdHorario').val(IdHorario);
-            $('#pNombre').val(nombre);
+
         }
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {
@@ -260,7 +341,6 @@
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnActualizar').html('Error');
                 }
             });
         });

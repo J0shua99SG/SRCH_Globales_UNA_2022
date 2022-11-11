@@ -18,7 +18,7 @@ class ActividadController extends Controller
     public function index(Request $request)
     {
         $actividades = DB::select("call sp_getall_tabla_actividad");
-        return view('/actividad/index', compact('actividad'));
+        return view('/actividad/index', compact('actividades'));
     }
 
     public function store(Request $request)
@@ -37,7 +37,7 @@ class ActividadController extends Controller
 
     public function delete(Request $request)
     {
-        DB::select('call sp_delete_actividad(?)',array($request->pIdActividad));
+        DB::select('call sp_delete_actividad(?)',array($request->IdActividad));
 
         return response()->json(['success'=>'Actividad eliminada satisfactoriamente!']);
     }
