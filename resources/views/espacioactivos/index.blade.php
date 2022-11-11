@@ -31,9 +31,9 @@
                                     <input type="hidden" id="IdEspacio" value="{{$espacioactivo->IdEspacio}}"></td>
                                     @endif
                                     @endforeach
-                                    @foreach ($tipoactivos as $tipoactivo)
-                                    @if ($espacioactivo->IdActivo == $tipoactivo->IdTipoActivo)
-                                    <td >{{ $tipoactivo->Nombre }}
+                                    @foreach ($activos as $activo)
+                                    @if ($espacioactivo->IdActivo == $activo->IdActivo)
+                                    <td >{{ $activo->Nombre }}
                                     <input type="hidden" id="IdActivo" value="{{$espacioactivo->IdActivo}}"></td>
                                     @endif
                                     @endforeach
@@ -82,8 +82,8 @@
                                 <label for="">Activo</label>
                                 <select class="form-control" name="pIdActivo" id="pIdActivo">
                                     <option value="1">Seleccionar activo</option>
-                                    @foreach ($tipoactivos as $tipoactivo)
-                                        <option value="{{ $tipoactivo->IdTipoActivo }}">{{ $tipoactivo->Nombre }}</option>
+                                    @foreach ($activos as $activo)
+                                        <option value="{{ $activo->IdActivo }}">{{ $activo->Nombre }}</option>
                                     @endforeach
                                 </select>
                                 <label for="">Cantidad</label>
