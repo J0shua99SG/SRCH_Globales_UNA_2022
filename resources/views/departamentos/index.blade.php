@@ -59,7 +59,8 @@
                     <div class="form-group">
                         <label for="">Nombre del Departamento</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre">
+                            placeholder="Escriba el nombre" onkeypress="validation(this.value)" maxlength="10">
+                        <small style="color: red"name="pNombreValidation" id="pNombreValidation">Campo requerido</small>
                         <input type="hidden" name="pIdDepartamento" id="pIdDepartamento" value="">
                     </div>
                 </form>
@@ -105,6 +106,7 @@ $('#crearDepartamento').click(function() {
     $('#tituloModal').text("Registrar Departamento");
     $('#btnGuardar').show();
     $('#btnActualizar').hide();
+    $('#pNombreValidation').hide();
     $('#formDepartamento').trigger("reset");
     $('#ModalDepartamento').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
@@ -129,11 +131,26 @@ $('#btnGuardar').click(function(e) {
             }, 2000);
         },
         error: function(data) {
+            elem = document.formDepartamento.pNombre;
+            if(elem.value == ""){
+                elem.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+            };
             swal_error();
-            $('#btnGuardar').html('Error');
         }
     });
 });
+
+//Validación: Cuando cambie el valor
+function validation(val) {
+  elem = document.formDepartamento.pNombre;
+
+  if(elem.length != 0){
+    elem.style.border = "1px solid #d1d3e2";
+    $('#pNombreValidation').hide();
+  };
+}
+
 //Funcion del Modal Detalles
 function modalDetalle(IdDepartamento) {
     //Capturamos los valores de la tabla
