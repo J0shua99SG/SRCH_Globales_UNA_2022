@@ -50,7 +50,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="tituloModal"></h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="cerrar()">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -59,14 +59,14 @@
                     <div class="form-group">
                         <label for="">Nombre del Departamento</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre" onkeypress="validation(this.value)" maxlength="10">
+                            placeholder="Escriba el nombre" onkeydown="validation(this.value)" maxlength="10">
                         <small style="color: red"name="pNombreValidation" id="pNombreValidation">Campo requerido</small>
                         <input type="hidden" name="pIdDepartamento" id="pIdDepartamento" value="">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="cerrar()">Cerrar</button>
                 <button class="btn btn-success" id="btnGuardar" type="button">Guardar</button>
                 <button class="btn btn-success" id="btnActualizar" type="button">Actualizar</button>
             </div>
@@ -92,6 +92,7 @@ function swal_success() {
         timer: 1000
     })
 }
+
 // error alert
 function swal_error() {
     Swal.fire({
@@ -101,6 +102,7 @@ function swal_error() {
         showConfirmButton: true,
     })
 }
+
 //Modal de guardar
 $('#crearDepartamento').click(function() {
     $('#tituloModal').text("Registrar Departamento");
@@ -141,6 +143,13 @@ $('#btnGuardar').click(function(e) {
     });
 });
 
+//cerrar
+function cerrar() {
+    $('#formDepartamento').trigger("reset");
+    $('#pNombreValidation').hide();
+    document.formDepartamento.pNombre.style.border = "1px solid #d1d3e2";
+};
+
 //Validación: Cuando cambie el valor
 function validation(val) {
   elem = document.formDepartamento.pNombre;
@@ -178,6 +187,7 @@ function modalActualizar(IdDepartamento) {
     $('#tituloModal').text("Actualizar Departamento");
     $('#btnGuardar').hide();
     $('#btnActualizar').show();
+    $('#pNombreValidation').hide();
     $('#formDepartamento').trigger("reset");
     $('#ModalDepartamento').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
@@ -204,6 +214,11 @@ $('#btnActualizar').click(function(e) {
             }, 2000);
         },
         error: function(data) {
+            elem = document.formDepartamento.pNombre;
+            if(elem.value == ""){
+                elem.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+            };
             swal_error();
             $('#btnActualizar').html('Error');
         }
