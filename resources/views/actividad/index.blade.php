@@ -64,13 +64,16 @@
                             <div class="form-group">
                                 <label for="">Tipo de actividad</label>
                                 <input type="text" name="pTipoActividad" class="form-control" id="pTipoActividad"
-                                    placeholder="Escriba el tipo de actividad">
+                                    placeholder="Escriba el tipo de actividad" onkeyup="validation()" maxlength="50">
+                                <small style="color: red" id="pTipoValidation">Campo requerido</small></br>
                                 <label for="">Nombre de la actividad</label>
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
-                                    placeholder="Escriba el nombre">
+                                    placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
+                                <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                                 <label for="">Descripción</label>
-                                <input type="text" name="pDescripcion" class="form-control" id="pDescripcion"
-                                    placeholder="Escriba la descripción">
+                                <textarea type="text" name="pDescripcion" class="form-control" id="pDescripcion"
+                                    placeholder="Escriba la descripción" onkeyup="validation()" maxlength="100"></textarea>
+                                <small style="color: red" id="pDescripcionValidation">Campo requerido</small></br>
                                 <input type="hidden" name="pIdActividad" id="pIdActividad" value="">
                             </div>
                         </form>
@@ -116,6 +119,7 @@
             $('#tituloModal').text("Registrar Actividad");
             $('#btnGuardar').show();
             $('#btnActualizar').hide();
+            limpiarValidaciones();
             $('#formActividad').trigger("reset");
             $('#ModalActividad').modal('show');
             $( "#pNombre" ).prop( "disabled", false );
@@ -142,11 +146,71 @@
                     }, 2000);
                 },
                 error: function(data) {
+                    validation();
                     swal_error();
-                    $('#btnGuardar').html('Error');
                 }
             });
         });
+
+        //Validación: Cuando cambie el valor y mostrar mensages
+        function validation() {
+            tipo = document.formActividad.pTipoActividad;
+            nombre = document.formActividad.pNombre;
+            descripcion = document.formActividad.pDescripcion;
+
+            if(tipo.value != ""){
+                if(tipo.value.length < 50){
+                    tipo.style.border = "1px solid #d1d3e2";
+                    $('#pTipoValidation').hide();
+                }else{
+                    document.getElementById('pTipoValidation').innerHTML= 'Solo se admiten 50 caracteres';
+                    document.getElementById('pTipoValidation').style.color= 'gray';
+                    $('#pTipoValidation').show();
+                }
+            }else{
+                tipo.style.border = "1px solid red";
+                $('#pTipoValidation').show();
+                return false;
+            }
+            if(nombre.value != ""){
+                if(nombre.value.length < 50){
+                    nombre.style.border = "1px solid #d1d3e2";
+                    $('#pNombreValidation').hide();
+                }else{
+                    document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
+                    document.getElementById('pNombreValidation').style.color= 'gray';
+                    $('#pNombreValidation').show();
+                }
+            }else{
+                nombre.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+                return false;
+            }
+            if(descripcion.value.length < 100){
+                descripcion.style.border = "1px solid #d1d3e2";
+                $('#pDescripcionValidation').hide();
+            }else{
+                document.getElementById('pDescripcionValidation').innerHTML= 'Solo se admiten 100 caracteres';
+                document.getElementById('pDescripcionValidation').style.color= 'gray';
+                $('#pDescripcionValidation').show();
+            }
+            return true;
+        }
+
+        function limpiarValidaciones(){
+            tipo = document.formActividad.pTipoActividad;
+            nombre = document.formActividad.pNombre;
+            descripcion = document.formActividad.pDescripcion;
+
+            tipo.style.border = "1px solid #d1d3e2";
+            nombre.style.border = "1px solid #d1d3e2";
+            descripcion.style.border = "1px solid #d1d3e2";
+
+            $('#pTipoValidation').hide();
+            $('#pNombreValidation').hide();
+            $('#pDescripcionValidation').hide();
+        }
+
         //Funcion del Modal Detalles
         function modalDetalle(IdActividad) {
             //Capturamos los valores de la tabla
@@ -158,6 +222,7 @@
             $('#tituloModal').text("Detalles de la actividad");
             $('#btnGuardar').hide();
             $('#btnActualizar').hide();
+            limpiarValidaciones();
             $('#formActividad').trigger("reset");
             $('#ModalActividad').modal('show');
 
@@ -183,6 +248,7 @@
             $('#btnActualizar').show();
             $('#formActividad').trigger("reset");
             $('#ModalActividad').modal('show');
+            limpiarValidaciones();
             $( "#pNombre" ).prop( "disabled", false );
             $( "#pDescripcion" ).prop( "disabled", false );
             $( "#pTipoActividad" ).prop( "disabled", false );
@@ -194,7 +260,11 @@
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {
             e.preventDefault();
-            $.ajax({
+
+            vali = validation();
+
+            if(vali == true){
+                $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -207,18 +277,19 @@
                     $('#ModalActividad').modal('hide');
                     swal_success();
                     setTimeout(function() {
-                        location.reload();
+                    location.reload();
                     }, 2000);
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnActualizar').html('Error');
                 }
-            });
+                });
+            }else{
+                validation();
+                swal_error();
+            }
+            
         });
-
-
-
 
         //Funcion para eliminar
         function eliminar(id) {
