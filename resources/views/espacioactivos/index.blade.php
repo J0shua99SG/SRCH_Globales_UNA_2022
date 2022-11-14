@@ -88,7 +88,8 @@
                                 </select>
                                 <label for="">Cantidad</label>
                                 <input type="number" name="pCantidad" class="form-control" id="pCantidad"
-                                    placeholder="Escriba la cantidad">
+                                    placeholder="Escriba la cantidad" onkeyup="validation()" maxlength="4">
+                                <small style="color: red" id="pCantidadValidation">Campo requerido</small></br>
                                 <input type="hidden" name="pIdEspacioActivo" id="pIdEspacioActivo" value="">
                             </div>
                         </form>
@@ -165,6 +166,35 @@
                 }
             });
         });
+        //Validación: Cuando cambie el valor y mostrar mensages
+        function validation() {
+            cantidad = document.formEspacioActivo.pCantidad;
+            
+            if(cantidad.value != ""){
+                if(cantidad.value.length < 4){
+                    cantidad.style.border = "1px solid #d1d3e2";
+                    $('#pCantidadValidation').hide();
+                }else{
+                    document.getElementById('pCantidadValidation').innerHTML= 'Solo se admite una cantidad maxima de 9999';
+                    document.getElementById('pCantidadValidation').style.color= 'gray';
+                    $('#pCantidadValidation').show();
+                }
+            }else{
+                cantidad.style.border = "1px solid red";
+                $('#pCantidadValidation').show();
+                return false;
+            }
+            return true;
+        }
+
+        function limpiarValidaciones(){
+            cantidad = document.formEspacioActivo.pCantidad;
+
+            cantidad.style.border = "1px solid #d1d3e2";
+
+            $('#pCantidadValidation').hide();
+        }
+
         //Funcion del Modal Detalles
         function modalDetalle(IdEspacio_activo) {
             //Capturamos los valores de la tabla

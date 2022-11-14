@@ -73,7 +73,8 @@
                         </select>
                         <label for="">Nombre del activo</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre">
+                            placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
+                        <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                         <input type="hidden" name="pIdActivo" id="pIdActivo" value="">
                     </div>
                 </form>
@@ -152,6 +153,36 @@ $('#btnGuardar').click(function(e) {
         }
     });
 });
+
+//Validación: Cuando cambie el valor y mostrar mensages
+        function validation() {
+            nombre = document.formActivo.pNombre;
+
+            if(nombre.value != ""){
+                if(nombre.value.length < 50){
+                    nombre.style.border = "1px solid #d1d3e2";
+                    $('#pNombreValidation').hide();
+                }else{
+                    document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
+                    document.getElementById('pNombreValidation').style.color= 'gray';
+                    $('#pNombreValidation').show();
+                }
+            }else{
+                nombre.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+                return false;
+            }
+            return true;
+        }
+
+        function limpiarValidaciones(){
+            nombre = document.formActividad.pNombre;
+            
+            nombre.style.border = "1px solid #d1d3e2";
+
+            $('#pNombreValidation').hide();
+        }
+
 //Funcion del Modal Detalles
 function modalDetalle(IdActivo) {
     //Capturamos los valores de la tabla
