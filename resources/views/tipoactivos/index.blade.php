@@ -62,10 +62,12 @@
                             <div class="form-group">
                                 <label for="">Nombre del tipo de activo</label>
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
-                                    placeholder="Escriba el nombre">
+                                    placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
+                                <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                                 <label for="">Descripción</label>
                                 <input type="text" name="pDescripcion" class="form-control" id="pDescripcion"
-                                    placeholder="Escriba la descripción">
+                                    placeholder="Escriba la descripción" onkeyup="validation()" maxlength="100">
+                                <small style="color: red" id="pDescripcionValidation">Campo requerido</small></br>
                                 <input type="hidden" name="pIdTipoActivo" id="pIdTipoActivo" value="">
                             </div>
                         </form>
@@ -115,6 +117,7 @@
             $('#ModalTipoActivo').modal('show');
             $( "#pNombre" ).prop( "disabled", false );
             $( "#pDescripcion" ).prop( "disabled", false );
+            limpiarValidaciones();
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
@@ -136,11 +139,55 @@
                     }, 2000);
                 },
                 error: function(data) {
+                    validation();
                     swal_error();
-                    $('#btnGuardar').html('Error');
                 }
             });
         });
+
+        //Validación: Cuando cambie el valor y mostrar mensages
+        function validation() {
+            nombre = document.formTipoActivo.pNombre;
+            descripcion = document.formTipoActivo.pDescripcion;
+
+            if(nombre.value != ""){
+                if(nombre.value.length < 50){
+                    nombre.style.border = "1px solid #d1d3e2";
+                    $('#pNombreValidation').hide();
+                }else{
+                    document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
+                    document.getElementById('pNombreValidation').style.color= 'gray';
+                    $('#pNombreValidation').show();
+                }
+            }else{
+                document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
+                document.getElementById('pNombreValidation').style.color= 'red';
+                nombre.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+                return false;
+            }
+            if(descripcion.value.length < 100){
+                descripcion.style.border = "1px solid #d1d3e2";
+                $('#pDescripcionValidation').hide();
+            }else{
+                document.getElementById('pDescripcionValidation').innerHTML= 'Solo se admiten 100 caracteres';
+                document.getElementById('pDescripcionValidation').style.color= 'gray';
+                $('#pDescripcionValidation').show();
+            }
+            return true;
+        }
+
+        function limpiarValidaciones(){
+            nombre = document.formTipoActivo.pNombre;
+            descripcion = document.formTipoActivo.pDescripcion;
+
+            nombre.style.border = "1px solid #d1d3e2";
+            descripcion.style.border = "1px solid #d1d3e2";
+
+            $('#pNombreValidation').hide();
+            $('#pDescripcionValidation').hide();
+        }
+
         //Funcion del Modal Detalles
         function modalDetalle(IdTipoActivo) {
             //Capturamos los valores de la tabla
@@ -161,6 +208,7 @@
             $('#pIdActividad').val(IdTipoActivo);
             $('#pNombre').val(nombre);
             $('#pDescripcion').val(descripcion);
+            limpiarValidaciones();
         }
         //Funcion del Modal Actualizar
         function modalActualizar(IdTipoActivo) {
@@ -179,31 +227,40 @@
             $('#pIdTipoActivo').val(IdTipoActivo);
             $('#pNombre').val(nombre);
             $('#pDescripcion').val(descripcion);
+            limpiarValidaciones();
         }
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {
             e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formTipoActivo').serialize(),
-                url: "{{ route('tipoactivos.update') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    $('#formTipoActivo').trigger("reset");
-                    $('#ModalTipoActivo').modal('hide');
-                    swal_success();
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                    $('#btnActualizar').html('Error');
-                }
-            });
+
+            vali = validation();
+
+            if(vali == true){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formTipoActivo').serialize(),
+                    url: "{{ route('tipoactivos.update') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#formTipoActivo').trigger("reset");
+                        $('#ModalTipoActivo').modal('hide');
+                        swal_success();
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                        $('#btnActualizar').html('Error');
+                    }
+                });
+            }else{
+                validation();
+                swal_error();
+            }
         });
 
 

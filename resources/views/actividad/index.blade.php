@@ -168,6 +168,8 @@
                     $('#pTipoValidation').show();
                 }
             }else{
+                document.getElementById('pTipoValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pTipoValidation').style.color= 'red';
                 tipo.style.border = "1px solid red";
                 $('#pTipoValidation').show();
                 return false;
@@ -182,6 +184,8 @@
                     $('#pNombreValidation').show();
                 }
             }else{
+                document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
+                document.getElementById('pNombreValidation').style.color= 'red';
                 nombre.style.border = "1px solid red";
                 $('#pNombreValidation').show();
                 return false;

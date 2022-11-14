@@ -59,8 +59,8 @@
                     <div class="form-group">
                         <label for="">Nombre del Departamento</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre" onkeydown="validation(this.value)" maxlength="10">
-                        <small style="color: red"name="pNombreValidation" id="pNombreValidation">Campo requerido</small>
+                            placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
+                        <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                         <input type="hidden" name="pIdDepartamento" id="pIdDepartamento" value="">
                     </div>
                 </form>
@@ -108,10 +108,10 @@ $('#crearDepartamento').click(function() {
     $('#tituloModal').text("Registrar Departamento");
     $('#btnGuardar').show();
     $('#btnActualizar').hide();
-    $('#pNombreValidation').hide();
     $('#formDepartamento').trigger("reset");
     $('#ModalDepartamento').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
+    limpiarValidaciones();
 });
 //Mandar a guardar los datos
 $('#btnGuardar').click(function(e) {
@@ -133,31 +133,41 @@ $('#btnGuardar').click(function(e) {
             }, 2000);
         },
         error: function(data) {
-            elem = document.formDepartamento.pNombre;
-            if(elem.value == ""){
-                elem.style.border = "1px solid red";
-                $('#pNombreValidation').show();
-            };
+            validation();
             swal_error();
         }
     });
 });
 
-//cerrar
-function cerrar() {
-    $('#formDepartamento').trigger("reset");
-    $('#pNombreValidation').hide();
-    document.formDepartamento.pNombre.style.border = "1px solid #d1d3e2";
-};
+//Validación: Cuando cambie el valor y mostrar mensages
+function validation() {
+    nombre = document.formDepartamento.pNombre;
 
-//Validación: Cuando cambie el valor
-function validation(val) {
-  elem = document.formDepartamento.pNombre;
+    if(nombre.value != ""){
+        if(nombre.value.length < 50){
+            nombre.style.border = "1px solid #d1d3e2";
+            $('#pNombreValidation').hide();
+        }else{
+            document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
+            document.getElementById('pNombreValidation').style.color= 'gray';
+            $('#pNombreValidation').show();
+        }
+    }else{
+        document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
+        document.getElementById('pNombreValidation').style.color= 'red';
+        nombre.style.border = "1px solid red";
+        $('#pNombreValidation').show();
+        return false;
+    }
+    return true;
+}
 
-  if(elem.length != 0){
-    elem.style.border = "1px solid #d1d3e2";
+function limpiarValidaciones(){
+    nombre = document.formDepartamento.pNombre;
+
+    nombre.style.border = "1px solid #d1d3e2";
+
     $('#pNombreValidation').hide();
-  };
 }
 
 //Funcion del Modal Detalles
@@ -175,7 +185,7 @@ function modalDetalle(IdDepartamento) {
     $( "#pNombre" ).prop( "disabled", true );
     $('#pIdDepartamento').val(IdDepartamento);
     $('#pNombre').val(nombre);
-
+    limpiarValidaciones();
 }
 //Funcion del Modal Actualizar
 function modalActualizar(IdDepartamento) {
@@ -187,42 +197,49 @@ function modalActualizar(IdDepartamento) {
     $('#tituloModal').text("Actualizar Departamento");
     $('#btnGuardar').hide();
     $('#btnActualizar').show();
-    $('#pNombreValidation').hide();
     $('#formDepartamento').trigger("reset");
     $('#ModalDepartamento').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
     $('#pIdDepartamento').val(IdDepartamento);
     $('#pNombre').val(nombre);
+    limpiarValidaciones();
 }
 //Mandar a actualizar los datos
 $('#btnActualizar').click(function(e) {
     e.preventDefault();
-    $.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: $('#formDepartamento').serialize(),
-        url: "{{ route('departamentos.update') }}",
-        type: "POST",
-        dataType: 'json',
-        success: function(data) {
-            $('#formDepartamento').trigger("reset");
-            $('#ModalDepartamento').modal('hide');
-            swal_success();
-            setTimeout(function() {
-                location.reload();
-            }, 2000);
-        },
-        error: function(data) {
-            elem = document.formDepartamento.pNombre;
-            if(elem.value == ""){
-                elem.style.border = "1px solid red";
-                $('#pNombreValidation').show();
-            };
-            swal_error();
-            $('#btnActualizar').html('Error');
-        }
-    });
+
+    vali = validation();
+
+    if(vali == true){
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: $('#formDepartamento').serialize(),
+            url: "{{ route('departamentos.update') }}",
+            type: "POST",
+            dataType: 'json',
+            success: function(data) {
+                $('#formDepartamento').trigger("reset");
+                $('#ModalDepartamento').modal('hide');
+                swal_success();
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(data) {
+                elem = document.formDepartamento.pNombre;
+                if(elem.value == ""){
+                    elem.style.border = "1px solid red";
+                    $('#pNombreValidation').show();
+                };
+                swal_error();
+            }
+        });
+    }else{
+        validation();
+        swal_error();
+    }
 });
 
 
