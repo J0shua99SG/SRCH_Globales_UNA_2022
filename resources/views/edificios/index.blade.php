@@ -57,7 +57,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="tituloModal"></h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="cerrar()">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -65,20 +65,21 @@
                 <form id="formEdificio" name="formEdificio">
                     <div class="form-group">
                         <select class="form-control" name="pIdCampus" id="pIdCampus">
-                            <option value="1">Seleccionar campus</option>
                             @foreach ($campus as $campu)
                                 <option value="{{ $campu->IdCampus }}">{{ $campu->Nombre }}</option>
                             @endforeach
                         </select>
-                        <label for="">Nombre del edificio</label>
+                        <br>
+                        <label for="">Edificio</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre">
+                            placeholder="Escriba el nombre del edificio..." onkeydown="validation(this.value)" maxlength="20" required>
+                        <small style="color: red" name="pNombreValidation" id="pNombreValidation">Campo requerido</small>
                         <input type="hidden" name="pIdEdificio" id="pIdEdificio" value="">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="cerrar()">Cerrar</button>
                 <button class="btn btn-success" id="btnGuardar" type="button">Guardar</button>
                 <button class="btn btn-success" id="btnActualizar" type="button">Actualizar</button>
             </div>
@@ -104,6 +105,7 @@ function swal_success() {
         timer: 1000
     })
 }
+
 // error alert
 function swal_error() {
     Swal.fire({
@@ -113,16 +115,19 @@ function swal_error() {
         showConfirmButton: true,
     })
 }
+
 //Modal de guardar
 $('#crearEdificio').click(function() {
     $('#tituloModal').text("Registrar Edificio");
     $('#btnGuardar').show();
     $('#btnActualizar').hide();
+    $('#pNombreValidation').hide();
     $('#formEdificio').trigger("reset");
     $('#ModalEdificio').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
     $( "#pIdCampus" ).prop( "disabled", false );
 });
+
 //Mandar a guardar los datos
 $('#btnGuardar').click(function(e) {
     e.preventDefault();
@@ -143,10 +148,32 @@ $('#btnGuardar').click(function(e) {
             }, 2000);
         },
         error: function(data) {
+            elem = document.formEdificio.pNombre;
+            if(elem.value == ""){
+                elem.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+            };
             swal_error();
         }
     });
 });
+
+//Cerrar
+function cerrar() {
+    $('#formEdificio').trigger("reset");
+    $('#pNombreValidation').hide();
+    document.formEdificio.pNombre.style.border = "1px solid #d1d3e2";
+};
+
+//Validación: Cuando cambie el valor
+function validation(val) {
+  elem = document.formEdificio.pNombre;
+  if(elem.length != 0){
+    elem.style.border = "1px solid #d1d3e2";
+    $('#pNombreValidation').hide();
+  };
+}
+
 //Funcion del Modal Detalles
 function modalDetalle(IdEdificio) {
     //Capturamos los valores de la tabla
@@ -206,6 +233,11 @@ $('#btnActualizar').click(function(e) {
             }, 2000);
         },
         error: function(data) {
+            elem = document.formEdificio.pNombre;
+            if(elem.value == ""){
+                elem.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+            };
             swal_error();
         }
     });

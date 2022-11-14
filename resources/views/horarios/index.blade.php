@@ -114,11 +114,11 @@
                                 <label for="">Hora final</label>
                                 <input class="form-control" type="time" name="pHoraFinalizacion" id="pHoraFinalizacion">
                                 <label for="">Fecha Inicio</label>
-                                <input type="date" class="form-control" name="pFechaInicio" id="pFechaInicio">
+                                <input type="date" class="form-control" name="pFechaInicio" id="pFechaInicio" min="{{date('Y-m-d')}}">
                                 <label for="">Fecha Final</label>
-                                <input type="date" class="form-control" name="pFechaFin" id="pFechaFin">
+                                <input type="date" class="form-control" name="pFechaFin" id="pFechaFin" min="{{date('Y-m-d')}}">
                                 <label for="">Fecha Activación</label>
-                                <input type="date" class="form-control" name="pFechaActivacion" id="pFechaActivacion">
+                                <input type="date" class="form-control" name="pFechaActivacion" id="pFechaActivacion"  min="{{date('Y-m-d')}}">
                                 <label for="">Dia</label>
                                 <select class="form-control" name="pDia" id="pDia">
                                     <option value="0">Seleccionar dia</option>
