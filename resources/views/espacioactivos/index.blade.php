@@ -135,6 +135,7 @@
             $('#tituloModal').text("Registrar Espacio Activo");
             $('#btnGuardar').show();
             $('#btnActualizar').hide();
+            limpiarValidaciones();
             $('#formEspacioActivo').trigger("reset");
             $('#ModalEspacioActivo').modal('show');
             $( "#pIdEspacio" ).prop( "disabled", false );
@@ -209,6 +210,7 @@
             $('#tituloModal').text("Detalles de espacio activo");
             $('#btnGuardar').hide();
             $('#btnActualizar').hide();
+            limpiarValidaciones();
             $('#formEspacioActivo').trigger("reset");
             $('#ModalEspacioActivo').modal('show');
 
@@ -234,6 +236,7 @@
             $('#btnActualizar').show();
             $('#formEspacioActivo').trigger("reset");
             $('#ModalEspacioActivo').modal('show');
+            limpiarValidaciones();
             $( "#pIdEspacio" ).prop( "disabled", false );
             $( "#pIdActivo" ).prop( "disabled", false );
             $( "#pCantidad" ).prop( "disabled", false );

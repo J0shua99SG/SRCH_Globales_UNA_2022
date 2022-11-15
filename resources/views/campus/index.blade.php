@@ -66,16 +66,20 @@
                             <div class="form-group">
                                 <label for="">Nombre del campus</label>
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
-                                    placeholder="Escriba el nombre">
+                                    placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
+                                    <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                                 <label for="">Sede</label>
                                 <input type="text" name="pSede" class="form-control" id="pSede"
-                                    placeholder="Escriba la sede">
+                                    placeholder="Escriba la sede" onkeyup="validation()" maxlength="50">
+                                    <small style="color: red" id="pSedeValidation">Campo requerido</small></br>
                                 <label for="">Dirección del campus</label>
                                 <input type="text" name="pDireccion" class="form-control" id="pDireccion"
-                                    placeholder="Escriba la dirección">
+                                    placeholder="Escriba la dirección" onkeyup="validation()" maxlength="100">
+                                    <small style="color: red" id="pDireccionValidation">Campo requerido</small></br>
                                 <label for="">Teléfono del campus</label>
                                 <input type="number" name="pTelefono" class="form-control" id="pTelefono"
-                                    placeholder="Escriba teléfono">
+                                    placeholder="Escriba teléfono" onkeyup="validation()" maxlength="20">
+                                    <small style="color: red" id="pTelefonoValidation">Campo requerido</small></br>
                                 <input type="hidden" name="pIdCampus" id="pIdCampus" value="">
                             </div>
                         </form>
@@ -121,6 +125,7 @@
             $('#tituloModal').text("Registrar Campus");
             $('#btnGuardar').show();
             $('#btnActualizar').hide();
+            limpiarValidaciones();
             $('#formCampus').trigger("reset");
             $('#ModalCampus').modal('show');
             $( "#pNombre" ).prop( "disabled", false );
@@ -153,6 +158,98 @@
                 }
             });
         });
+
+        //Validación: Cuando cambie el valor y mostrar mensages
+        function validation() {
+            nombre = document.formCampus.pNombre;
+            sede = document.formCampus.pSede;
+            direccion = document.formCampus.pDireccion;
+            telefono = document.formCampus.pTelefono;
+            
+            if(nombre.value != ""){
+                if(nombre.value.length < 50){
+                    nombre.style.border = "1px solid #d1d3e2";
+                    $('#pNombreValidation').hide();
+                }else{
+                    document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
+                    document.getElementById('pNombreValidation').style.color= 'gray';
+                    $('#pNombreValidation').show();
+                }
+            }else{
+                document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
+                document.getElementById('pNombreValidation').style.color= 'red';
+                nombre.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+                return false;
+            }
+            if(sede.value != ""){
+                if(sede.value.length < 50){
+                    sede.style.border = "1px solid #d1d3e2";
+                    $('#pSedeValidation').hide();
+                }else{
+                    document.getElementById('pSedeValidation').innerHTML= 'Solo se admiten 50 caracteres';
+                    document.getElementById('pSedeValidation').style.color= 'gray';
+                    $('#pSedeValidation').show();
+                }
+            }else{
+                document.getElementById('pSedeValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pSedeValidation').style.color= 'red';
+                sede.style.border = "1px solid red";
+                $('#pSedeValidation').show();
+                return false;
+            }
+            if(direccion.value != ""){
+                if(direccion.value.length < 100){
+                    direccion.style.border = "1px solid #d1d3e2";
+                    $('#pDireccionValidation').hide();
+                }else{
+                    document.getElementById('pDireccionValidation').innerHTML= 'Solo se admiten 100 caracteres';
+                    document.getElementById('pDireccionValidation').style.color= 'gray';
+                    $('#pDireccionValidation').show();
+                }
+            }else{
+                document.getElementById('pDireccionValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pDireccionValidation').style.color= 'red';
+                direccion.style.border = "1px solid red";
+                $('#pDireccionValidation').show();
+                return false;
+            }
+            if(telefono.value != ""){
+                if(telefono.value.length < 20){
+                    telefono.style.border = "1px solid #d1d3e2";
+                    $('#pTelefonoValidation').hide();
+                }else{
+                    document.getElementById('pTelefonoValidation').innerHTML= 'Solo se admiten 20 caracteres';
+                    document.getElementById('pTelefonoValidation').style.color= 'gray';
+                    $('#pTelefonoValidation').show();
+                }
+            }else{
+                document.getElementById('pTelefonoValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pTelefonoValidation').style.color= 'red';
+                telefono.style.border = "1px solid red";
+                $('#pTelefonoValidation').show();
+                return false;
+            }
+            return true;
+        }
+
+        function limpiarValidaciones(){
+            nombre = document.formCampus.pNombre;
+            sede = document.formCampus.pSede
+            direccion = document.formCampus.pDireccion;
+            telefono = document.formCampus.pTelefono;
+
+            nombre.style.border = "1px solid #d1d3e2";
+            sede.style.border = "1px solid #d1d3e2";
+            direccion.style.border = "1px solid #d1d3e2";
+            telefono.style.border = "1px solid #d1d3e2";
+            
+            $('#pNombreValidation').hide();
+            $('#pSedeValidation').hide();
+            $('#pDireccionValidation').hide();
+            $('#pTelefonoValidation').hide();
+        }
+
         //Funcion del Modal Detalles
         function modalDetalle(IdCampus) {
             //Capturamos los valores de la tabla
@@ -165,6 +262,7 @@
             $('#tituloModal').text("Detalles del Campus");
             $('#btnGuardar').hide();
             $('#btnActualizar').hide();
+            limpiarValidaciones();
             $('#formCampus').trigger("reset");
             $('#ModalCampus').modal('show');
 
@@ -193,6 +291,7 @@
             $('#btnActualizar').show();
             $('#formCampus').trigger("reset");
             $('#ModalCampus').modal('show');
+            limpiarValidaciones();
             $( "#pNombre" ).prop( "disabled", false );
             $( "#pSede" ).prop( "disabled", false );
             $( "#pDireccion" ).prop( "disabled", false );

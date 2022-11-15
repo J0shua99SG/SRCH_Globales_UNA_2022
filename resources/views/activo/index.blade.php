@@ -123,6 +123,7 @@ $('#crearActivo').click(function() {
     $('#tituloModal').text("Registrar Activo");
     $('#btnGuardar').show();
     $('#btnActualizar').hide();
+    limpiarValidaciones();
     $('#formActivo').trigger("reset");
     $('#ModalActivo').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
@@ -193,6 +194,7 @@ function modalDetalle(IdActivo) {
     $('#tituloModal').text("Detalles del Activo");
     $('#btnGuardar').hide();
     $('#btnActualizar').hide();
+    limpiarValidaciones();
     $('#formActivo').trigger("reset");
     $('#ModalActivo').modal('show');
 
@@ -216,6 +218,7 @@ function modalActualizar(IdActivo) {
     $('#btnActualizar').show();
     $('#formActivo').trigger("reset");
     $('#ModalActivo').modal('show');
+    limpiarValidaciones();
     $( "#pNombre" ).prop( "disabled", false );
     $( "#pIdTipoActivo" ).prop( "disabled", false );
     $('#pIdActivo').val(IdActivo);
