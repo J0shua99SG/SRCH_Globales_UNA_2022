@@ -64,16 +64,19 @@
             <div class="modal-body">
                 <form id="formEdificio" name="formEdificio">
                     <div class="form-group">
-                        <select class="form-control" name="pIdCampus" id="pIdCampus">
+                        <select class="form-control" name="pIdCampus" id="pIdCampus" onchange="validarCampus()" required>
+                                <option value="">Seleccione un Campus</option>
                             @foreach ($campus as $campu)
                                 <option value="{{ $campu->IdCampus }}">{{ $campu->Nombre }}</option>
                             @endforeach
                         </select>
+                        <small style="color: red" id="pCampusValidation"></small></br>
+                      
                         <br>
                         <label for="">Edificio</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre del edificio..." onkeydown="validation(this.value)" maxlength="20" required>
-                        <small style="color: red" name="pNombreValidation" id="pNombreValidation">Campo requerido</small>
+                            placeholder="Escriba el nombre" onkeyup="validarNombre()" maxlength="50">
+                            <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                         <input type="hidden" name="pIdEdificio" id="pIdEdificio" value="">
                     </div>
                 </form>
@@ -111,7 +114,7 @@ function swal_error() {
     Swal.fire({
         position: 'centered',
         icon: 'error',
-        title: 'Ocurrio un error!',
+        title: 'Ocurrió un error!',
         showConfirmButton: true,
     })
 }
@@ -121,11 +124,11 @@ $('#crearEdificio').click(function() {
     $('#tituloModal').text("Registrar Edificio");
     $('#btnGuardar').show();
     $('#btnActualizar').hide();
-    $('#pNombreValidation').hide();
     $('#formEdificio').trigger("reset");
     $('#ModalEdificio').modal('show');
     $( "#pNombre" ).prop( "disabled", false );
     $( "#pIdCampus" ).prop( "disabled", false );
+    limpiarValidaciones();
 });
 
 //Mandar a guardar los datos
@@ -148,30 +151,53 @@ $('#btnGuardar').click(function(e) {
             }, 2000);
         },
         error: function(data) {
-            elem = document.formEdificio.pNombre;
-            if(elem.value == ""){
-                elem.style.border = "1px solid red";
-                $('#pNombreValidation').show();
-            };
             swal_error();
+            validarNombre();
+            validarCampus()
         }
     });
 });
 
-//Cerrar
-function cerrar() {
-    $('#formEdificio').trigger("reset");
-    $('#pNombreValidation').hide();
-    document.formEdificio.pNombre.style.border = "1px solid #d1d3e2";
-};
+//Validaciones 
 
-//Validación: Cuando cambie el valor
-function validation(val) {
-  elem = document.formEdificio.pNombre;
-  if(elem.length != 0){
-    elem.style.border = "1px solid #d1d3e2";
+function validarNombre() {
+    nombre = document.formEdificio.pNombre;
+    if(nombre.value != ""){
+        if(nombre.value.length < 50){
+            nombre.style.border = "1px solid #d1d3e2";
+            $('#pNombreValidation').hide();
+        }else{
+            document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
+            document.getElementById('pNombreValidation').style.color= 'gray';
+            $('#pNombreValidation').show();
+        }
+    }else{
+        document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
+        document.getElementById('pNombreValidation').style.color= 'red';
+        nombre.style.border = "1px solid red";
+        $('#pNombreValidation').show();
+        return false;
+    }
+    return true;
+}
+
+function validarCampus(){
+    campus = $("#pIdCampus");
+
+    if (campus.val() == "") {
+        $("#pCampusValidation").text("Debe seleccionar un Campus...");
+        $("#pCampusValidation").style.color = "red";
+    } else {
+        $("#pCampusValidation").text("");
+    }
+}
+
+//Limpiar validaciones
+function limpiarValidaciones() {
+    nombre = document.formEdificio.pNombre;
+    nombre.style.border = "1px solid #d1d3e2";
     $('#pNombreValidation').hide();
-  };
+    $("#pCampusValidation").text("");
 }
 
 //Funcion del Modal Detalles
@@ -194,6 +220,7 @@ function modalDetalle(IdEdificio) {
     $('#pNombre').val(nombre);
     $('#pIdCampus').val(campus);
 
+    limpiarValidaciones();
 }
 //Funcion del Modal Actualizar
 function modalActualizar(IdEdificio) {
@@ -212,6 +239,8 @@ function modalActualizar(IdEdificio) {
     $('#pIdEdificio').val(IdEdificio);
     $('#pNombre').val(nombre);
     $('#pIdCampus').val(campus);
+
+    limpiarValidaciones();
 }
 //Mandar a actualizar los datos
 $('#btnActualizar').click(function(e) {
@@ -233,12 +262,10 @@ $('#btnActualizar').click(function(e) {
             }, 2000);
         },
         error: function(data) {
-            elem = document.formEdificio.pNombre;
-            if(elem.value == ""){
-                elem.style.border = "1px solid red";
-                $('#pNombreValidation').show();
-            };
             swal_error();
+            validarNombre();
+            validarCampus();
+            
         }
     });
 });
