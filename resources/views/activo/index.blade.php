@@ -177,7 +177,7 @@ $('#btnGuardar').click(function(e) {
         }
 
         function limpiarValidaciones(){
-            nombre = document.formActividad.pNombre;
+            nombre = document.formActivo.pNombre;
             
             nombre.style.border = "1px solid #d1d3e2";
 
