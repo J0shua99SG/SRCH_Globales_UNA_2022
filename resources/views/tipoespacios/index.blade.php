@@ -159,10 +159,10 @@
 
             if(nombre.value != ""){
                 if(nombre.value.length < 50){
-                    var AllowRegex  = /\d/;
+                    var AllowRegex  = new RegExp('^[A-Z]+$', 'i');
 
-                    if(AllowRegex.test(nombre.value)){
-                        document.getElementById('pNombreValidation').innerHTML= 'No se permiten números';
+                    if(!AllowRegex.test(nombre.value)){
+                        document.getElementById('pNombreValidation').innerHTML= 'No se permiten números ni caracteres especiales';
                         document.getElementById('pNombreValidation').style.color= 'red';
                         nombre.style.border = "1px solid red";
                         $('#pNombreValidation').show();
@@ -310,8 +310,8 @@
                         dataType: 'json',
                         success: function(data) {
                             Swal.fire(
-                                'Eliminado!',
-                                'Se completo la acción',
+                                'Eliminado',
+                                'Se completó la acción',
                                 'success'
                             )
                             setTimeout(function() { // wait for 5 secs(2)

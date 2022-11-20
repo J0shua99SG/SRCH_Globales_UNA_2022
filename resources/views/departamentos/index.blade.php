@@ -85,9 +85,9 @@ var table = $('#dataTable');
 // success alert
 function swal_success() {
     Swal.fire({
-        position: 'top-end',
+        position: 'centered',
         icon: 'success',
-        title: 'Accion realizada con exito!',
+        title: '¡Acción realizada con éxito!',
         showConfirmButton: false,
         timer: 1000
     })
@@ -98,7 +98,7 @@ function swal_error() {
     Swal.fire({
         position: 'centered',
         icon: 'error',
-        title: 'Ocurrio un error!',
+        title: 'Ha ocurrido un error',
         showConfirmButton: true,
     })
 }
@@ -116,27 +116,34 @@ $('#crearDepartamento').click(function() {
 //Mandar a guardar los datos
 $('#btnGuardar').click(function(e) {
     e.preventDefault();
-    $.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: $('#formDepartamento').serialize(),
-        url: "{{ route('departamentos.guardar') }}",
-        type: "POST",
-        dataType: 'json',
-        success: function(data) {
-            $('#formDepartamento').trigger("reset");
-            $('#ModalDepartamento').modal('hide');
-            swal_success();
-            setTimeout(function() {
-                location.reload();
-            }, 2000);
-        },
-        error: function(data) {
-            validation();
-            swal_error();
-        }
-    });
+    vali = validation();
+
+    if(vali == true){
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: $('#formDepartamento').serialize(),
+            url: "{{ route('departamentos.guardar') }}",
+            type: "POST",
+            dataType: 'json',
+            success: function(data) {
+                $('#formDepartamento').trigger("reset");
+                $('#ModalDepartamento').modal('hide');
+                swal_success();
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(data) {
+                validation();
+                swal_error();
+            }
+        });
+    }else{
+        validation();
+        swal_error();
+    }
 });
 
 //Validación: Cuando cambie el valor y mostrar mensages
@@ -145,8 +152,18 @@ function validation() {
 
     if(nombre.value != ""){
         if(nombre.value.length < 50){
-            nombre.style.border = "1px solid #d1d3e2";
-            $('#pNombreValidation').hide();
+            var AllowRegex  = new RegExp('^[A-Z]+$', 'i');
+
+            if(!AllowRegex.test(nombre.value)){
+                document.getElementById('pNombreValidation').innerHTML= 'No se permiten números ni caracteres especiales';
+                document.getElementById('pNombreValidation').style.color= 'red';
+                nombre.style.border = "1px solid red";
+                $('#pNombreValidation').show();
+                return false;
+            }else{
+                nombre.style.border = "1px solid #d1d3e2";
+                $('#pNombreValidation').hide();
+            }
         }else{
             document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
             document.getElementById('pNombreValidation').style.color= 'gray';
@@ -248,13 +265,13 @@ $('#btnActualizar').click(function(e) {
 //Funcion para eliminar
 function eliminar(id) {
     Swal.fire({
-        title: 'Esta seguro?',
-        text: "Este acción no es reversible!",
+        title: '¿Está seguro?',
+        text: "Esta acción no es reversible",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminar!'
+        confirmButtonText: 'Si, eliminar'
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
