@@ -517,9 +517,7 @@
                         $('#formHorario').trigger("reset");
                         $('#ModalHorario').modal('hide');
                         swal_success(data.success);
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
+
                     },
                     error: function(data) {
                         swal_error();
@@ -557,7 +555,7 @@
                         },
                         type: "POST",
                         data: {
-                            IdDepartamento: id
+                            pIdHorario: id
                         },
                         url: "{{ route('horarios.delete') }}",
                         type: "POST",
