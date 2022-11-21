@@ -33,7 +33,8 @@
                                         <button class="btn btn-sm btn-icon btn-outline-danger btn-circle mr-2"
                                             onclick="eliminar({{ $tipoespacio->IdTipoEspacio }})"><i
                                                 class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2" onclick="modalDetalle({{ $tipoespacio->IdTipoEspacio }})"><i
+                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2"
+                                            onclick="modalDetalle({{ $tipoespacio->IdTipoEspacio }})"><i
                                                 class="fas
                                             fa-eye"></i></button>
 
@@ -62,12 +63,12 @@
                             <div class="form-group">
                                 <label for="">Nombre del tipo de espacio</label>
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
-                                    placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
-                                <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
+                                    placeholder="Escriba el nombre" onkeyup="validation()" minlength="1" maxlength="50" required>
+                                <span style="color: red" id="pNombreValidation">Campo requerido</span></br>
                                 <label for="">Descripción</label>
                                 <input type="text" name="pDescripcion" class="form-control" id="pDescripcion"
-                                    placeholder="Escriba la descripción" onkeyup="validation()" maxlength="200">
-                                <small style="color: red" id="pDescripcionValidation">Campo requerido</small></br>
+                                    placeholder="Escriba la descripción" onkeyup="validation()" minlength="0" maxlength="200">
+                                <span style="color: red" id="pDescripcionValidation">Campo requerido</span></br>
                                 <input type="hidden" name="pIdTipoEspacio" id="pIdTipoEspacio" value="">
                             </div>
                         </form>
@@ -82,7 +83,7 @@
         </div>
         <!-- Modal-->
     </div>
-    
+
     <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
         integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
 
@@ -90,11 +91,11 @@
         var table = $('#dataTable');
 
         // success alert
-        function swal_success() {
+        function swal_success(response) {
             Swal.fire({
                 position: 'centered',
                 icon: 'success',
-                title: '¡Acción realizada con éxito!',
+                title: response,
                 showConfirmButton: false,
                 timer: 1000
             })
@@ -115,8 +116,8 @@
             $('#btnActualizar').hide();
             $('#formTipoEspacio').trigger("reset");
             $('#ModalTipoEspacio').modal('show');
-            $( "#pNombre" ).prop( "disabled", false );
-            $( "#pDescripcion" ).prop( "disabled", false );
+            $("#pNombre").prop("disabled", false);
+            $("#pDescripcion").prop("disabled", false);
             limpiarValidaciones();
         });
         //Mandar a guardar los datos
@@ -124,7 +125,7 @@
             e.preventDefault();
             vali = validation();
 
-            if(vali == true){
+            if (vali == true) {
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -136,7 +137,7 @@
                     success: function(data) {
                         $('#formTipoEspacio').trigger("reset");
                         $('#ModalTipoEspacio').modal('hide');
-                        swal_success();
+                        swal_success(data.success);
                         setTimeout(function() {
                             location.reload();
                         }, 2000);
@@ -146,9 +147,14 @@
                         swal_error();
                     }
                 });
-            }else{
+            } else {
                 validation();
-                swal_error();
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
             }
         });
 
@@ -157,44 +163,45 @@
             nombre = document.formTipoEspacio.pNombre;
             descripcion = document.formTipoEspacio.pDescripcion;
 
-            if(nombre.value != ""){
-                if(nombre.value.length < 50){
-                    var AllowRegex  = new RegExp('^[A-Z]+$', 'i');
+            if (nombre.value != "") {
+                if (nombre.value.length < 50) {
+                    var AllowRegex = new RegExp(/^[A-Za-zZñÑáéíóúÁÉÍÓÚ\s]+$/g);
 
-                    if(!AllowRegex.test(nombre.value)){
-                        document.getElementById('pNombreValidation').innerHTML= 'No se permiten números ni caracteres especiales';
-                        document.getElementById('pNombreValidation').style.color= 'red';
+                    if (!AllowRegex.test(nombre.value)) {
+                        document.getElementById('pNombreValidation').innerHTML =
+                            'No se permiten números ni caracteres especiales';
+                        document.getElementById('pNombreValidation').style.color = 'red';
                         nombre.style.border = "1px solid red";
                         $('#pNombreValidation').show();
                         return false;
-                    }else{
+                    } else {
                         nombre.style.border = "1px solid #d1d3e2";
                         $('#pNombreValidation').hide();
                     }
-                }else{
-                    document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
-                    document.getElementById('pNombreValidation').style.color= 'gray';
+                } else {
+                    document.getElementById('pNombreValidation').innerHTML = 'Solo se admiten 50 caracteres';
+                    document.getElementById('pNombreValidation').style.color = 'red';
                     $('#pNombreValidation').show();
                 }
-            }else{
-                document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
-                document.getElementById('pNombreValidation').style.color= 'red';
+            } else {
+                document.getElementById('pNombreValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pNombreValidation').style.color = 'red';
                 nombre.style.border = "1px solid red";
                 $('#pNombreValidation').show();
                 return false;
             }
-            if(descripcion.value.length < 100){
+            if (descripcion.value.length < 100) {
                 descripcion.style.border = "1px solid #d1d3e2";
                 $('#pDescripcionValidation').hide();
-            }else{
-                document.getElementById('pDescripcionValidation').innerHTML= 'Solo se admiten 100 caracteres';
-                document.getElementById('pDescripcionValidation').style.color= 'gray';
+            } else {
+                document.getElementById('pDescripcionValidation').innerHTML = 'Solo se admiten 100 caracteres';
+                document.getElementById('pDescripcionValidation').style.color = 'red';
                 $('#pDescripcionValidation').show();
             }
             return true;
         }
 
-        function limpiarValidaciones(){
+        function limpiarValidaciones() {
             nombre = document.formTipoEspacio.pNombre;
             descripcion = document.formTipoEspacio.pDescripcion;
 
@@ -208,10 +215,10 @@
         //Funcion del Modal Detalles
         function modalDetalle(IdActividad) {
             //Capturamos los valores de la tabla
-            row_id = "row-"+IdActividad;
-            let tipoActividad = $("#"+ row_id + " " + "#TipoActividad").text();
-            let nombre = $("#"+ row_id + " " + "#Nombre").text();
-            let descripcion = $("#"+ row_id + " " + "#Descripcion").text();
+            row_id = "row-" + IdActividad;
+            let tipoActividad = $("#" + row_id + " " + "#TipoActividad").text();
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
+            let descripcion = $("#" + row_id + " " + "#Descripcion").text();
 
             $('#tituloModal').text("Detalles del tipo de espacio");
             $('#btnGuardar').hide();
@@ -219,9 +226,9 @@
             $('#formTipoEspacio').trigger("reset");
             $('#ModalTipoEspacio').modal('show');
 
-            $( "#pNombre" ).prop( "disabled", true );
-            $( "#pDescripcion" ).prop( "disabled", true );
-            $( "#pTipoActividad" ).prop( "disabled", true );
+            $("#pNombre").prop("disabled", true);
+            $("#pDescripcion").prop("disabled", true);
+            $("#pTipoActividad").prop("disabled", true);
 
             $('#pIdActividad').val(IdActividad);
             $('#pTipoActividad').val(tipoActividad);
@@ -232,17 +239,17 @@
         //Funcion del Modal Actualizar
         function modalActualizar(IdTipoEspacio) {
             //Capturamos los valores de la tabla
-            row_id = "row-"+IdTipoEspacio;
-            let nombre = $("#"+ row_id + " " + "#Nombre").text();
-            let descripcion = $("#"+ row_id + " " + "#Descripcion").text();
+            row_id = "row-" + IdTipoEspacio;
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
+            let descripcion = $("#" + row_id + " " + "#Descripcion").text();
 
             $('#tituloModal').text("Actualizar tipo de espacio");
             $('#btnGuardar').hide();
             $('#btnActualizar').show();
             $('#formTipoEspacio').trigger("reset");
             $('#ModalTipoEspacio').modal('show');
-            $( "#pNombre" ).prop( "disabled", false );
-            $( "#pDescripcion" ).prop( "disabled", false );
+            $("#pNombre").prop("disabled", false);
+            $("#pDescripcion").prop("disabled", false);
             $('#pIdTipoEspacio').val(IdTipoEspacio);
             $('#pNombre').val(nombre);
             $('#pDescripcion').val(descripcion);
@@ -251,10 +258,10 @@
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {
             e.preventDefault();
-            
+
             vali = validation();
 
-            if(vali == true){
+            if (vali == true) {
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -266,19 +273,23 @@
                     success: function(data) {
                         $('#formTipoEspacio').trigger("reset");
                         $('#ModalTipoEspacio').modal('hide');
-                        swal_success();
+                        swal_success(data.success);
                         setTimeout(function() {
                             location.reload();
                         }, 2000);
                     },
                     error: function(data) {
                         swal_error();
-                    //    $('#btnActualizar').html('Error');
                     }
                 });
-            }else{
+            } else {
                 validation();
-                swal_error();
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
             }
         });
 
@@ -311,7 +322,7 @@
                         success: function(data) {
                             Swal.fire(
                                 'Eliminado',
-                                'Se completó la acción',
+                                data.success,
                                 'success'
                             )
                             setTimeout(function() { // wait for 5 secs(2)

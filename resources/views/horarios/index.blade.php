@@ -32,28 +32,30 @@
                                     <td id="id">{{ $horarios->IdHorario }}</td>
                                     <td id="nombre">{{ $horarios->Nombre }}</td>
                                     @foreach ($actividad as $actividades)
-                                    @if ($horarios->IdActividad == $actividades->IdActividad)
-                                    <td >{{ $actividades->Nombre }}
-                                    <input type="hidden" id="IdActividad" value="{{$horarios->IdActividad}}"></td>
-                                    @endif
+                                        @if ($horarios->IdActividad == $actividades->IdActividad)
+                                            <td>{{ $actividades->Nombre }}
+                                                <input type="hidden" id="IdActividad" value="{{ $horarios->IdActividad }}">
+                                            </td>
+                                        @endif
                                     @endforeach
 
                                     @foreach ($espacio as $espacios)
-                                    @if ($horarios->IdEspacio == $espacios->IdEspacio)
-                                    <td>{{ $espacios->Nombre }}
-                                        <input type="hidden" id="IdEspacio" value="{{$horarios->IdEspacio}}"></td>
-                                    @endif
+                                        @if ($horarios->IdEspacio == $espacios->IdEspacio)
+                                            <td>{{ $espacios->Nombre }}
+                                                <input type="hidden" id="IdEspacio" value="{{ $horarios->IdEspacio }}">
+                                            </td>
+                                        @endif
                                     @endforeach
                                     <td id="HoraInicio">{{ $horarios->HoraInicio }}</td>
                                     <td id="HoraFinalizacion">{{ $horarios->HoraFinalizacion }}</td>
                                     <td id="FechaInicio">{{ $horarios->FechaInicio }}</td>
                                     <td id="FechaFin">{{ $horarios->FechaFin }}</td>
                                     <td id="Dia">{{ $horarios->Dia }}</td>
-                                    @if ($horarios->Estado ==1)
-                                    <td id="Estado"  value="{{$horarios->Estado}}">Habilitado</td>
+                                    @if ($horarios->Estado == 1)
+                                        <td id="Estado" value="{{ $horarios->Estado }}">Habilitado</td>
                                     @endif
                                     @if ($horarios->Estado == 0)
-                                    <td id="Estado" value="{{$horarios->Estado}}">Desabilitado</td>
+                                        <td id="Estado" value="{{ $horarios->Estado }}">Desabilitado</td>
                                     @endif
                                     <td>
                                         <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2"
@@ -90,38 +92,50 @@
                     <div class="modal-body">
                         <form id="formHorario" name="formHorario">
                             <div class="form-group">
-                                <label for="">usuario</label>
+                                <label for="">Usuario</label>
                                 <select class="form-control" name="pIdUsuario" id="pIdUsuario">
-                                    <option value="0">Seleccionar usuario</option>
-                                    <option value="1">Carlos</option>
+                                    <option value="">Seleccionar usuario</option>
+                                    @foreach ($usuario as $usuarios)
+                                        <option value="{{ $usuarios->IdUsuario }}">{{ $usuarios->Nombre }}
+                                            {{ $usuarios->Ape1 }}</option>
+                                    @endforeach
                                 </select>
                                 <label for="">Actividad</label>
                                 <select class="form-control" name="pIdActividad" id="pIdActividad">
-                                    <option value="1">Seleccionar actividad</option>
+                                    <option value="">Seleccionar actividad</option>
                                     @foreach ($actividad as $actividades)
-                                        <option value="{{ $actividades->IdActividad }}">{{ $actividades->Nombre }}</option>
+                                        <option value="{{ $actividades->IdActividad }}">{{ $actividades->Nombre }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <label for="">Espacio</label>
                                 <select class="form-control" name="pIdEspacio" id="pIdEspacio">
-                                    <option value="1">Seleccionar espacio</option>
+                                    <option value="">Seleccionar espacio</option>
                                     @foreach ($espacio as $espacios)
                                         <option value="{{ $espacios->IdEspacio }}">{{ $espacios->Nombre }}</option>
                                     @endforeach
                                 </select>
                                 <label for="">Hora Inicio</label>
                                 <input class="form-control" type="time" name="pHoraInicio" id="pHoraInicio">
+                                <span id="horaInicio" style="color: red; display:none">Campo requerido</span><br>
                                 <label for="">Hora final</label>
                                 <input class="form-control" type="time" name="pHoraFinalizacion" id="pHoraFinalizacion">
+                                <span id="horaFIn" style="color: red; display:none">Campo requerido</span><br>
                                 <label for="">Fecha Inicio</label>
-                                <input type="date" class="form-control" name="pFechaInicio" id="pFechaInicio" min="{{date('Y-m-d')}}">
+                                <input type="date" class="form-control" name="pFechaInicio" id="pFechaInicio"
+                                    min="{{ date('Y-m-d') }}">
+                                <span id="fechaIni" style="color: red; display:none">Campo requerido</span><br>
                                 <label for="">Fecha Final</label>
-                                <input type="date" class="form-control" name="pFechaFin" id="pFechaFin" min="{{date('Y-m-d')}}">
+                                <input type="date" class="form-control" name="pFechaFin" id="pFechaFin"
+                                    min="{{ date('Y-m-d') }}">
+                                <span id="fechaFin" style="color: red; display:none">Campo requerido</span><br>
                                 <label for="">Fecha Activación</label>
-                                <input type="date" class="form-control" name="pFechaActivacion" id="pFechaActivacion"  min="{{date('Y-m-d')}}">
+                                <input type="date" class="form-control" name="pFechaActivacion" id="pFechaActivacion"
+                                    min="{{ date('Y-m-d') }}">
+                                <span id="fechaActiv" style="color: red; display:none">Campo requerido</span><br>
                                 <label for="">Dia</label>
                                 <select class="form-control" name="pDia" id="pDia">
-                                    <option value="0">Seleccionar dia</option>
+                                    <option value="">Seleccionar dia</option>
                                     <option value="Lunes">Lunes</option>
                                     <option value="Martes">Martes</option>
                                     <option value="Miercoles">Miercoles</option>
@@ -133,13 +147,16 @@
                                 <label for="">Estado</label>
                                 <div style="display: flex; justify-content: space-around;">
                                     <div>
-                                     <span>habilitado </span><input type="radio" class="form-control" id="pEstado1" name="pEstado" value="1">
+                                        <span>habilitado </span><input type="radio" class="form-control" id="pEstado1"
+                                            name="pEstado" value="1" checked>
                                     </div>
                                     <div>
-                                        <span>Desabilitado</span><input type="radio" class="form-control" id="pEstado0" name="pEstado" value="0">
+                                        <span>Desabilitado</span><input type="radio" class="form-control"
+                                            id="pEstado0" name="pEstado" value="0">
                                     </div>
 
                                 </div>
+                                <span id="estadoHorario" style="color: red; display:none">Campo requerido</span><br>
                                 <input type="hidden" name="pIdHorario" id="pIdHorario" value="">
                             </div>
                         </form>
@@ -162,11 +179,11 @@
         var table = $('#dataTable');
 
         // success alert
-        function swal_success() {
+        function swal_success(response) {
             Swal.fire({
-                position: 'top-end',
+                position: 'centered',
                 icon: 'success',
-                title: 'Accion realizada con exito!',
+                title: response,
                 showConfirmButton: false,
                 timer: 1000
             })
@@ -182,6 +199,7 @@
         }
         //Modal de guardar
         $('#crearHorario').click(function() {
+            limpiarValidaciones();
             $('#tituloModal').text("Registrar Horario");
             $('#btnGuardar').show();
             $('#btnActualizar').hide();
@@ -198,33 +216,194 @@
             $("#pDia").prop("disabled", false);
             $("#pEstado").prop("disabled", false);
         });
+        function limpiarValidaciones(){
+            let usuario = $("#pIdUsuario").css({"border": "1px solid #d1d3e2" });
+            let actividad = $("#pIdActividad").css({"border": "1px solid #d1d3e2" });
+            let espacio = $("#pIdEspacio").css({"border": "1px solid #d1d3e2" });
+            let horaInicio = $("#pHoraInicio").css({"border": "1px solid #d1d3e2" });
+            let horaFin = $("#pHoraFinalizacion").css({"border": "1px solid #d1d3e2" });
+            let fechaInicio = $("#pFechaInicio").css({"border": "1px solid #d1d3e2" });
+            let fechaFin = $("#pFechaFin").css({"border": "1px solid #d1d3e2" });
+            let fechaActivacion = $("#pFechaActivacion").css({"border": "1px solid #d1d3e2" });
+            $("#horaInicio").hide();
+            $("#fechaIni").hide();
+        }
+
+        function validaciones() {
+
+            let usuario = $("#pIdUsuario").val();
+            let actividad = $("#pIdActividad").val();
+            let espacio = $("#pIdEspacio").val();
+            let horaInicio = $("#pHoraInicio").val();
+            let horaFin = $("#pHoraFinalizacion").val();
+            let fechaInicio = $("#pFechaInicio").val();
+            let fechaFin = $("#pFechaFin").val();
+            let fechaActivacion = $("#pFechaActivacion").val();
+            let dia = $("#pDia").val();
+            var hoy = new Date();
+            var FechaAhora = hoy.toLocaleDateString('es-CR');
+
+            if (horaInicio == "") {
+                $("#pHoraInicio").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pHoraInicio").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (horaFin == "") {
+                $("#pHoraFinalizacion").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pHoraFinalizacion").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (fechaInicio == "") {
+                $("#pFechaInicio").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pFechaInicio").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (fechaFin == "") {
+                $("#pFechaFin").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pFechaFin").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (fechaActivacion == "") {
+                $("#pFechaActivacion").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pFechaActivacion").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (dia == "") {
+                $("#pDia").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pDia").css({
+                    "border": "1px solid green"
+                });
+            }
+
+            if (usuario == "") {
+                $("#pIdUsuario").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pIdUsuario").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (actividad == "") {
+                $("#pIdActividad").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pIdActividad").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (espacio == "") {
+                $("#pIdEspacio").css({
+                    "border": "1px solid red"
+                });
+                return false;
+            } else {
+                $("#pIdEspacio").css({
+                    "border": "1px solid green"
+                });
+            }
+            if (horaInicio > horaFin) {
+                $("#pHoraInicio").css({
+                    "border": "1px solid red"
+                });
+                $("#horaInicio").text("La hora de inicio tiene que ser menor a la hora final");
+                $("#horaInicio").show();
+                return false;
+            } else {
+                $("#horaInicio").text("Campo requerido");
+                $("#horaInicio").hide();
+            }
+            if(FechaAhora < fechaInicio){
+                $("#pFechaInicio").css({
+                    "border": "1px solid red"
+                });
+                $("#fechaIni").text("La fecha de inicio tiene que ser mayor a la fecha de hoy");
+                $("#fechaIni").show();
+                return false;
+            }
+            if (fechaInicio > fechaFin) {
+                $("#pFechaInicio").css({
+                    "border": "1px solid red"
+                });
+                $("#fechaIni").text("La fecha de inicio tiene que ser menor a la fecha final");
+                $("#fechaIni").show();
+                return false;
+            } else {
+                $("#fechaIni").text("Campo requerido");
+                $("#fechaIni").hide();
+            }
+            return true;
+        }
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
             e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formHorario').serialize(),
-                url: "{{ route('horarios.guardar') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    $('#formHorario').trigger("reset");
-                    $('#ModalHorario').modal('hide');
-                    swal_success();
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                    $('#btnGuardar').html('Error');
-                }
-            });
+            val = validaciones();
+            if (val == true) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formHorario').serialize(),
+                    url: "{{ route('horarios.guardar') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#formHorario').trigger("reset");
+                        $('#ModalHorario').modal('hide');
+                        swal_success(data.success);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
+            }
+
         });
         //Funcion del Modal Detalles
         function modalDetalle(IdHorario) {
+            limpiarValidaciones();
             //Capturamos los valores de la tabla
             row_id = "row-" + IdHorario;
             let usuario = $("#" + row_id + " " + "#nombre").text();
@@ -234,7 +413,7 @@
             let horaFinalizacion = $("#" + row_id + " " + "#HoraFinalizacion").text();
             let fechaInicio = $("#" + row_id + " " + "#FechaInicio").text();
             let fechaFin = $("#" + row_id + " " + "#FechaFin").text();
-//            let fechaActivacion = $("#" + row_id + " " + "#pFechaActivacion").text();
+            //            let fechaActivacion = $("#" + row_id + " " + "#pFechaActivacion").text();
             let dia = $("#" + row_id + " " + "#Dia").text();
             let estado = $("#" + row_id + " " + "#Estado").text();
             $('#tituloModal').text("Detalles del Horario");
@@ -261,18 +440,19 @@
             $('#pHoraFinalizacion').val(horaFinalizacion);
             $('#pFechaInicio').val(fechaInicio);
             $('#pFechaFin').val(fechaFin);
- //           $('#pFechaActivacion').val(fechaActivacion);
+            //           $('#pFechaActivacion').val(fechaActivacion);
             $('#pDia').val(dia);
-            if(estado == "Habilitado"){
+            if (estado == "Habilitado") {
                 $("#pEstado1").prop("checked", true);
             }
-            if(estado == "Desabilitado"){
+            if (estado == "Desabilitado") {
                 $("#pEstado0").prop("checked", true);
             }
 
         }
         //Funcion del Modal Actualizar
         function modalActualizar(IdHorario) {
+            limpiarValidaciones();
             //Capturamos los valores de la tabla
             row_id = "row-" + IdHorario;
             let usuario = $("#" + row_id + " " + "#nombre").text();
@@ -282,7 +462,7 @@
             let horaFinalizacion = $("#" + row_id + " " + "#HoraFinalizacion").text();
             let fechaInicio = $("#" + row_id + " " + "#FechaInicio").text();
             let fechaFin = $("#" + row_id + " " + "#FechaFin").text();
-//            let fechaActivacion = $("#" + row_id + " " + "#pFechaActivacion").text();
+            //            let fechaActivacion = $("#" + row_id + " " + "#pFechaActivacion").text();
             let dia = $("#" + row_id + " " + "#Dia").text();
             let estado = $("#" + row_id + " " + "#Estado").text();
             $('#tituloModal').text("Actualizar Horario");
@@ -309,12 +489,12 @@
             $('#pHoraFinalizacion').val(horaFinalizacion);
             $('#pFechaInicio').val(fechaInicio);
             $('#pFechaFin').val(fechaFin);
- //           $('#pFechaActivacion').val(fechaActivacion);
+            //           $('#pFechaActivacion').val(fechaActivacion);
             $('#pDia').val(dia);
-            if(estado == "Habilitado"){
+            if (estado == "Habilitado") {
                 $("#pEstado1").prop("checked", true);
             }
-            if(estado == "Desabilitado"){
+            if (estado == "Desabilitado") {
                 $("#pEstado0").prop("checked", true);
             }
             $('#pIdHorario').val(IdHorario);
@@ -323,26 +503,37 @@
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {
             e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formHorario').serialize(),
-                url: "{{ route('horarios.update') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    $('#formHorario').trigger("reset");
-                    $('#ModalHorario').modal('hide');
-                    swal_success();
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                }
-            });
+            val = validaciones();
+            if (val == true) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formHorario').serialize(),
+                    url: "{{ route('horarios.update') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#formHorario').trigger("reset");
+                        $('#ModalHorario').modal('hide');
+                        swal_success(data.success);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
+            }
+
         });
 
 
@@ -374,7 +565,7 @@
                         success: function(data) {
                             Swal.fire(
                                 'Eliminado!',
-                                'Se completo la acción',
+                                data.success,
                                 'success'
                             )
                             setTimeout(function() {

@@ -35,7 +35,8 @@
                                         <button class="btn btn-sm btn-icon btn-outline-danger btn-circle mr-2"
                                             onclick="eliminar({{ $actividad->IdActividad }})"><i
                                                 class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2" onclick="modalDetalle({{ $actividad->IdActividad }})"><i
+                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2"
+                                            onclick="modalDetalle({{ $actividad->IdActividad }})"><i
                                                 class="fas
                                             fa-eye"></i></button>
 
@@ -71,8 +72,8 @@
                                     placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
                                 <span style="color: red" id="pNombreValidation">Campo requerido</span></br>
                                 <label for="">Descripción</label>
-                                <textarea type="text" name="pDescripcion" class="form-control" id="pDescripcion"
-                                    placeholder="Escriba la descripción" onkeyup="validation()" maxlength="100"></textarea>
+                                <textarea type="text" name="pDescripcion" class="form-control" id="pDescripcion" placeholder="Escriba la descripción"
+                                    onkeyup="validation()" maxlength="100"></textarea>
                                 <span style="color: red" id="pDescripcionValidation">Campo requerido</span></br>
                                 <input type="hidden" name="pIdActividad" id="pIdActividad" value="">
                             </div>
@@ -88,7 +89,7 @@
         </div>
         <!-- Modal-->
     </div>
-    
+
     <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
         integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
 
@@ -122,34 +123,45 @@
             limpiarValidaciones();
             $('#formActividad').trigger("reset");
             $('#ModalActividad').modal('show');
-            $( "#pNombre" ).prop( "disabled", false );
-            $( "#pDescripcion" ).prop( "disabled", false );
-            $( "#pTipoActividad" ).prop( "disabled", false );
+            $("#pNombre").prop("disabled", false);
+            $("#pDescripcion").prop("disabled", false);
+            $("#pTipoActividad").prop("disabled", false);
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
+            vali = validation();
             e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formActividad').serialize(),
-                url: "{{ route('actividad.guardar') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    $('#formActividad').trigger("reset");
-                    $('#ModalActividad').modal('hide');
-                    swal_success(data.success);
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    validation();
-                    swal_error();
-                }
-            });
+            if (vali == true) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formActividad').serialize(),
+                    url: "{{ route('actividad.guardar') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#formActividad').trigger("reset");
+                        $('#ModalActividad').modal('hide');
+                        swal_success(data.success);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        validation();
+                        swal_error();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
+            }
+
         });
 
         //Validación: Cuando cambie el valor y mostrar mensages
@@ -158,50 +170,50 @@
             nombre = document.formActividad.pNombre;
             descripcion = document.formActividad.pDescripcion;
 
-            if(tipo.value != ""){
-                if(tipo.value.length < 50){
+            if (tipo.value != "") {
+                if (tipo.value.length < 50) {
                     tipo.style.border = "1px solid #d1d3e2";
                     $('#pTipoValidation').hide();
-                }else{
-                    document.getElementById('pTipoValidation').innerHTML= 'Solo se admiten 50 caracteres';
-                    document.getElementById('pTipoValidation').style.color= 'gray';
+                } else {
+                    document.getElementById('pTipoValidation').innerHTML = 'Solo se admiten 50 caracteres';
+                    document.getElementById('pTipoValidation').style.color = 'red';
                     $('#pTipoValidation').show();
                 }
-            }else{
+            } else {
                 document.getElementById('pTipoValidation').innerHTML = 'Campo requerido';
-                document.getElementById('pTipoValidation').style.color= 'red';
+                document.getElementById('pTipoValidation').style.color = 'red';
                 tipo.style.border = "1px solid red";
                 $('#pTipoValidation').show();
                 return false;
             }
-            if(nombre.value != ""){
-                if(nombre.value.length < 50){
+            if (nombre.value != "") {
+                if (nombre.value.length < 50) {
                     nombre.style.border = "1px solid #d1d3e2";
                     $('#pNombreValidation').hide();
-                }else{
-                    document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
-                    document.getElementById('pNombreValidation').style.color= 'gray';
+                } else {
+                    document.getElementById('pNombreValidation').innerHTML = 'Solo se admiten 50 caracteres';
+                    document.getElementById('pNombreValidation').style.color = 'red';
                     $('#pNombreValidation').show();
                 }
-            }else{
-                document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
-                document.getElementById('pNombreValidation').style.color= 'red';
+            } else {
+                document.getElementById('pNombreValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pNombreValidation').style.color = 'red';
                 nombre.style.border = "1px solid red";
                 $('#pNombreValidation').show();
                 return false;
             }
-            if(descripcion.value.length < 100){
+            if (descripcion.value.length < 100) {
                 descripcion.style.border = "1px solid #d1d3e2";
                 $('#pDescripcionValidation').hide();
-            }else{
-                document.getElementById('pDescripcionValidation').innerHTML= 'Solo se admiten 100 caracteres';
-                document.getElementById('pDescripcionValidation').style.color= 'gray';
+            } else {
+                document.getElementById('pDescripcionValidation').innerHTML = 'Solo se admiten 100 caracteres';
+                document.getElementById('pDescripcionValidation').style.color = 'red';
                 $('#pDescripcionValidation').show();
             }
             return true;
         }
 
-        function limpiarValidaciones(){
+        function limpiarValidaciones() {
             tipo = document.formActividad.pTipoActividad;
             nombre = document.formActividad.pNombre;
             descripcion = document.formActividad.pDescripcion;
@@ -218,10 +230,10 @@
         //Funcion del Modal Detalles
         function modalDetalle(IdActividad) {
             //Capturamos los valores de la tabla
-            row_id = "row-"+IdActividad;
-            let tipoActividad = $("#"+ row_id + " " + "#TipoActividad").text();
-            let nombre = $("#"+ row_id + " " + "#Nombre").text();
-            let descripcion = $("#"+ row_id + " " + "#Descripcion").text();
+            row_id = "row-" + IdActividad;
+            let tipoActividad = $("#" + row_id + " " + "#TipoActividad").text();
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
+            let descripcion = $("#" + row_id + " " + "#Descripcion").text();
 
             $('#tituloModal').text("Detalles de la actividad");
             $('#btnGuardar').hide();
@@ -230,9 +242,9 @@
             $('#formActividad').trigger("reset");
             $('#ModalActividad').modal('show');
 
-            $( "#pNombre" ).prop( "disabled", true );
-            $( "#pDescripcion" ).prop( "disabled", true );
-            $( "#pTipoActividad" ).prop( "disabled", true );
+            $("#pNombre").prop("disabled", true);
+            $("#pDescripcion").prop("disabled", true);
+            $("#pTipoActividad").prop("disabled", true);
 
             $('#pIdActividad').val(IdActividad);
             $('#pTipoActividad').val(tipoActividad);
@@ -242,10 +254,10 @@
         //Funcion del Modal Actualizar
         function modalActualizar(IdActividad) {
             //Capturamos los valores de la tabla
-            row_id = "row-"+IdActividad;
-            let tipoActividad = $("#"+ row_id + " " + "#TipoActividad").text();
-            let nombre = $("#"+ row_id + " " + "#Nombre").text();
-            let descripcion = $("#"+ row_id + " " + "#Descripcion").text();
+            row_id = "row-" + IdActividad;
+            let tipoActividad = $("#" + row_id + " " + "#TipoActividad").text();
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
+            let descripcion = $("#" + row_id + " " + "#Descripcion").text();
 
             $('#tituloModal').text("Actualizar Actividad");
             $('#btnGuardar').hide();
@@ -253,9 +265,9 @@
             $('#formActividad').trigger("reset");
             $('#ModalActividad').modal('show');
             limpiarValidaciones();
-            $( "#pNombre" ).prop( "disabled", false );
-            $( "#pDescripcion" ).prop( "disabled", false );
-            $( "#pTipoActividad" ).prop( "disabled", false );
+            $("#pNombre").prop("disabled", false);
+            $("#pDescripcion").prop("disabled", false);
+            $("#pTipoActividad").prop("disabled", false);
             $('#pIdActividad').val(IdActividad);
             $('#pTipoActividad').val(tipoActividad);
             $('#pNombre').val(nombre);
@@ -267,32 +279,37 @@
 
             vali = validation();
 
-            if(vali == true){
+            if (vali == true) {
                 $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formActividad').serialize(),
-                url: "{{ route('actividad.update') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    $('#formActividad').trigger("reset");
-                    $('#ModalActividad').modal('hide');
-                    swal_success(data.success);
-                    setTimeout(function() {
-                    location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                }
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formActividad').serialize(),
+                    url: "{{ route('actividad.update') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#formActividad').trigger("reset");
+                        $('#ModalActividad').modal('hide');
+                        swal_success(data.success);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                    }
                 });
-            }else{
+            } else {
                 validation();
-                swal_error();
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
             }
-            
+
         });
 
         //Funcion para eliminar
