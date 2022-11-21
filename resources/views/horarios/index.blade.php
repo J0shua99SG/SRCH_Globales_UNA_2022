@@ -517,7 +517,9 @@
                         $('#formHorario').trigger("reset");
                         $('#ModalHorario').modal('hide');
                         swal_success(data.success);
-
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
                     },
                     error: function(data) {
                         swal_error();
