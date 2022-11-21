@@ -65,15 +65,15 @@
                                 <label for="">Tipo de actividad</label>
                                 <input type="text" name="pTipoActividad" class="form-control" id="pTipoActividad"
                                     placeholder="Escriba el tipo de actividad" onkeyup="validation()" maxlength="50">
-                                <small style="color: red" id="pTipoValidation">Campo requerido</small></br>
+                                <span style="color: red" id="pTipoValidation">Campo requerido</span></br>
                                 <label for="">Nombre de la actividad</label>
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
                                     placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
-                                <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
+                                <span style="color: red" id="pNombreValidation">Campo requerido</span></br>
                                 <label for="">Descripción</label>
                                 <textarea type="text" name="pDescripcion" class="form-control" id="pDescripcion"
                                     placeholder="Escriba la descripción" onkeyup="validation()" maxlength="100"></textarea>
-                                <small style="color: red" id="pDescripcionValidation">Campo requerido</small></br>
+                                <span style="color: red" id="pDescripcionValidation">Campo requerido</span></br>
                                 <input type="hidden" name="pIdActividad" id="pIdActividad" value="">
                             </div>
                         </form>
@@ -96,11 +96,11 @@
         var table = $('#dataTable');
 
         // success alert
-        function swal_success() {
+        function swal_success(response) {
             Swal.fire({
-                position: 'top-end',
+                position: 'centered',
                 icon: 'success',
-                title: 'Accion realizada con exito!',
+                title: response,
                 showConfirmButton: false,
                 timer: 1000
             })
@@ -140,7 +140,7 @@
                 success: function(data) {
                     $('#formActividad').trigger("reset");
                     $('#ModalActividad').modal('hide');
-                    swal_success();
+                    swal_success(data.success);
                     setTimeout(function() {
                         location.reload();
                     }, 2000);
@@ -279,7 +279,7 @@
                 success: function(data) {
                     $('#formActividad').trigger("reset");
                     $('#ModalActividad').modal('hide');
-                    swal_success();
+                    swal_success(data.success);
                     setTimeout(function() {
                     location.reload();
                     }, 2000);
@@ -321,7 +321,7 @@
                         success: function(data) {
                             Swal.fire(
                                 'Eliminado!',
-                                'Se completo la acción',
+                                data.success,
                                 'success'
                             )
                             setTimeout(function() { // wait for 5 secs(2)

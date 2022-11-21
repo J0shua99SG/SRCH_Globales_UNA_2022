@@ -59,34 +59,33 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="tituloModal"></h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="cerrar()">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <form id="formEdificio" name="formEdificio">
                             <div class="form-group">
-                                <select class="form-control" name="pIdCampus" id="pIdCampus" onchange="validarCampus()"
+                                <select class="form-control" name="pIdCampus" id="pIdCampus"
                                     required>
                                     <option value="">Seleccione un Campus</option>
                                     @foreach ($campus as $campu)
                                         <option value="{{ $campu->IdCampus }}">{{ $campu->Nombre }}</option>
                                     @endforeach
                                 </select>
-                                <small style="color: red" id="pCampusValidation"></small></br>
+                                <span style="color: red" id="pCampusValidation"></span></br>
 
                                 <br>
                                 <label for="">Edificio</label>
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
-                                    placeholder="Escriba el nombre" onkeyup="validarNombre()" maxlength="50">
-                                <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
+                                    placeholder="Escriba el nombre" maxlength="54">
+                                <span style="color: red" id="pNombreValidation">Campo requerido</span></br>
                                 <input type="hidden" name="pIdEdificio" id="pIdEdificio" value="">
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal"
-                            onclick="cerrar()">Cerrar</button>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
                         <button class="btn btn-success" id="btnGuardar" type="button">Guardar</button>
                         <button class="btn btn-success" id="btnActualizar" type="button">Actualizar</button>
                     </div>
@@ -101,6 +100,7 @@
 
     <script>
         var table = $('#dataTable');
+        var validar = true;
 
         // success alert
         function swal_success(response) {
@@ -136,72 +136,74 @@
 
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formEdificio').serialize(),
-                url: "{{ route('edificios.guardar') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    let response = data.success;
-                    $('#formEdificio').trigger("reset");
-                    $('#ModalEdificio').modal('hide');
-                    swal_success(response);
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                    validarNombre();
-                    validarCampus()
-                }
-            });
+            validaciones();
+            if (validar == true) {
+                e.preventDefault();
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formEdificio').serialize(),
+                    url: "{{ route('edificios.guardar') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        let response = data.success;
+                        $('#formEdificio').trigger("reset");
+                        $('#ModalEdificio').modal('hide');
+                        swal_success(response);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+
+                    }
+                });
+            } else {
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
+            }
         });
+        function validaciones(){
+            validar = true;
+            let nombre = $("#pNombre").val();
+            let campus = $("#pIdCampus").val();
 
-        //Validaciones 
-
-        function validarNombre() {
-            nombre = document.formEdificio.pNombre;
-            if (nombre.value != "") {
-                if (nombre.value.length < 50) {
-                    nombre.style.border = "1px solid #d1d3e2";
-                    $('#pNombreValidation').hide();
-                } else {
-                    document.getElementById('pNombreValidation').innerHTML = 'Solo se admiten 50 caracteres';
-                    document.getElementById('pNombreValidation').style.color = 'gray';
-                    $('#pNombreValidation').show();
-                }
-            } else {
-                document.getElementById('pNombreValidation').innerHTML = 'Campo requerido';
-                document.getElementById('pNombreValidation').style.color = 'red';
-                nombre.style.border = "1px solid red";
-                $('#pNombreValidation').show();
-                return false;
+            if(campus == ""){
+                $("#pIdCampus").css({"border": "1px solid red" });
+                validar = false;
+            }else{
+                $("#pIdCampus").css({"border": "1px solid green" });
+                validar = true;
             }
-            return true;
+            if (nombre.length == "") {
+                $("#pNombre").css({"border": "1px solid red" });
+                $("#pNombreValidation").show();
+                validar = false;
+            }
+            if(nombre.length >= 1 && nombre.length <= 50){
+                $("#pNombre").css({"border": "1px solid green" });
+                $("#pNombreValidation").hide();
+            }else{
+                $("#pNombre").css({"border": "1px solid red" });
+                $("#pNombreValidation").text("Solo se admiten de 1 a 50 caracteres");
+                $("#pNombreValidation").show();
+            }
+
         }
 
-        function validarCampus() {
-            campus = $("#pIdCampus");
-
-            if (campus.val() == "") {
-                $("#pCampusValidation").text("Debe seleccionar un Campus...");
-                $("#pCampusValidation").style.color = "red";
-            } else {
-                $("#pCampusValidation").text("");
-            }
-        }
 
         //Limpiar validaciones
         function limpiarValidaciones() {
-            nombre = document.formEdificio.pNombre;
-            nombre.style.border = "1px solid #d1d3e2";
-            $('#pNombreValidation').hide();
-            $("#pCampusValidation").text("");
+            $("#pIdCampus").css({"border": "1px solid #d1d3e2" });
+            $("#pNombre").css({"border": "1px solid #d1d3e2" });
+            $("#pNombreValidation").hide();
         }
 
         //Funcion del Modal Detalles
@@ -248,31 +250,42 @@
         }
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formEdificio').serialize(),
-                url: "{{ route('edificios.update') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    let response = data.success;
-                    $('#formEdificio').trigger("reset");
-                    $('#ModalEdificio').modal('hide');
-                    swal_success(response);
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                    validarNombre();
-                    validarCampus();
+            validaciones();
+            if (validar == true) {
+                e.preventDefault();
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formEdificio').serialize(),
+                    url: "{{ route('edificios.update') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        let response = data.success;
+                        $('#formEdificio').trigger("reset");
+                        $('#ModalEdificio').modal('hide');
+                        swal_success(response);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                        validarNombre();
+                        validarCampus();
 
-                }
-            });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
+            }
+
         });
 
 

@@ -1,86 +1,88 @@
 @extends('layout.master')
 @section('content')
-<div class="container-fluid">
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Lista de Departamentos</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <div class="d-flex flex-row-reverse" style="margin: 5px 0px;"><button
-                        class="btn btn-sm btn-pill btn-outline-primary font-weight-bolder" id="crearDepartamento"><i
-                            class="fas fa-plus"></i>Agregar Departamento</button></div>
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Id Departamento</th>
-                            <th>Nombre</th>
-                            <th>Funciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($departamento as $departamentos)
-                            <tr id="row-{{ $departamentos->IdDepartamento }}">
-                                <td id="id">{{ $departamentos->IdDepartamento }}</td>
-                                <td id="Nombre">{{ $departamentos->Nombre }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2"
-                                        onclick="modalActualizar({{ $departamentos->IdDepartamento }})"><i
-                                            class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-outline-danger btn-circle mr-2"
-                                        onclick="eliminar({{ $departamentos->IdDepartamento }})"><i
-                                            class="fas fa-trash-alt"></i></button>
-                                    <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2" onclick="modalDetalle({{ $departamentos->IdDepartamento }})"><i
-                                            class="fas
+    <div class="container-fluid">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Lista de Departamentos</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div class="d-flex flex-row-reverse" style="margin: 5px 0px;"><button
+                            class="btn btn-sm btn-pill btn-outline-primary font-weight-bolder" id="crearDepartamento"><i
+                                class="fas fa-plus"></i>Agregar Departamento</button></div>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Id Departamento</th>
+                                <th>Nombre</th>
+                                <th>Funciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($departamento as $departamentos)
+                                <tr id="row-{{ $departamentos->IdDepartamento }}">
+                                    <td id="id">{{ $departamentos->IdDepartamento }}</td>
+                                    <td id="Nombre">{{ $departamentos->Nombre }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2"
+                                            onclick="modalActualizar({{ $departamentos->IdDepartamento }})"><i
+                                                class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-icon btn-outline-danger btn-circle mr-2"
+                                            onclick="eliminar({{ $departamentos->IdDepartamento }})"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2"
+                                            onclick="modalDetalle({{ $departamentos->IdDepartamento }})"><i
+                                                class="fas
                                         fa-eye"></i></button>
 
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Modal-->
-    <div class="modal fade" id="ModalDepartamento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tituloModal"></h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="cerrar()">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formDepartamento" name="formDepartamento">
-                    <div class="form-group">
-                        <label for="">Nombre del Departamento</label>
-                        <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre" onkeyup="validation()" minlength="3" maxlength="50" required>
-                        <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
-                        <input type="hidden" name="pIdDepartamento" id="pIdDepartamento" value="">
+
+        <!-- Modal-->
+        <div class="modal fade" id="ModalDepartamento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tituloModal"></h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="cerrar()">Cerrar</button>
-                <button class="btn btn-success" id="btnGuardar" type="button">Guardar</button>
-                <button class="btn btn-success" id="btnActualizar" type="button">Actualizar</button>
+                    <div class="modal-body">
+                        <form id="formDepartamento" name="formDepartamento">
+                            <div class="form-group">
+                                <label for="">Nombre del Departamento</label>
+                                <input type="text" name="pNombre" class="form-control" id="pNombre"
+                                    placeholder="Escriba el nombre" onkeyup="validation()" minlength="3" maxlength="50"
+                                    required>
+                                <span style="color: red" id="pNombreValidation">Campo requerido</span></br>
+                                <input type="hidden" name="pIdDepartamento" id="pIdDepartamento" value="">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                        <button class="btn btn-success" id="btnGuardar" type="button">Guardar</button>
+                        <button class="btn btn-success" id="btnActualizar" type="button">Actualizar</button>
+                    </div>
+                </div>
             </div>
         </div>
+        <!-- Modal-->
     </div>
-</div>
-<!-- Modal-->
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
-integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
+        integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
 
-<script>
-var table = $('#dataTable');
+    <script>
+        var table = $('#dataTable');
 
         // success alert
         function swal_success(response) {
@@ -102,206 +104,217 @@ var table = $('#dataTable');
             })
         }
 
-//Modal de guardar
-$('#crearDepartamento').click(function() {
-    $('#tituloModal').text("Registrar Departamento");
-    $('#btnGuardar').show();
-    $('#btnActualizar').hide();
-    $('#formDepartamento').trigger("reset");
-    $('#ModalDepartamento').modal('show');
-    $( "#pNombre" ).prop( "disabled", false );
-    limpiarValidaciones();
-});
-//Mandar a guardar los datos
-$('#btnGuardar').click(function(e) {
-    e.preventDefault();
-    vali = validation();
+        //Modal de guardar
+        $('#crearDepartamento').click(function() {
+            $('#tituloModal').text("Registrar Departamento");
+            $('#btnGuardar').show();
+            $('#btnActualizar').hide();
+            $('#formDepartamento').trigger("reset");
+            $('#ModalDepartamento').modal('show');
+            $("#pNombre").prop("disabled", false);
+            limpiarValidaciones();
+        });
+        //Mandar a guardar los datos
+        $('#btnGuardar').click(function(e) {
+            e.preventDefault();
+            vali = validation();
 
-    if(vali == true){
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: $('#formDepartamento').serialize(),
-            url: "{{ route('departamentos.guardar') }}",
-            type: "POST",
-            dataType: 'json',
-            success: function(data) {
-                let response = data.success;
-                $('#formDepartamento').trigger("reset");
-                $('#ModalDepartamento').modal('hide');
-                swal_success(response);
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
-            },
-            error: function(data) {
+            if (vali == true) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formDepartamento').serialize(),
+                    url: "{{ route('departamentos.guardar') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        let response = data.success;
+                        $('#formDepartamento').trigger("reset");
+                        $('#ModalDepartamento').modal('hide');
+                        swal_success(response);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        validation();
+                        swal_error();
+                    }
+                });
+            } else {
                 validation();
-                swal_error();
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
             }
         });
-    }else{
-        validation();
-        swal_error();
-    }
-});
 
-//Validación: Cuando cambie el valor y mostrar mensages
-function validation() {
-    nombre = document.formDepartamento.pNombre;
+        //Validación: Cuando cambie el valor y mostrar mensages
+        function validation() {
+            nombre = document.formDepartamento.pNombre;
 
-    if(nombre.value != ""){
-        if(nombre.value.length <= 10){
-            var AllowRegex  = new RegExp(/^[A-Za-zZñÑáéíóúÁÉÍÓÚ\s]+$/g);
+            if (nombre.value != "") {
+                if (nombre.value.length <= 10) {
+                    var AllowRegex = new RegExp(/^[A-Za-zZñÑáéíóúÁÉÍÓÚ\s]+$/g);
 
-            if(!AllowRegex.test(nombre.value)){
-                document.getElementById('pNombreValidation').innerHTML= 'No se permiten números ni caracteres especiales';
-                document.getElementById('pNombreValidation').style.color= 'red';
+                    if (!AllowRegex.test(nombre.value)) {
+                        document.getElementById('pNombreValidation').innerHTML =
+                            'No se permiten números ni caracteres especiales';
+                        document.getElementById('pNombreValidation').style.color = 'red';
+                        nombre.style.border = "1px solid red";
+                        $('#pNombreValidation').show();
+                        return false;
+                    } else {
+                        nombre.style.border = "1px solid #d1d3e2";
+                        $('#pNombreValidation').hide();
+                    }
+                } else {
+                    document.getElementById('pNombreValidation').innerHTML = 'Solo se admiten 10 caracteres';
+                    document.getElementById('pNombreValidation').style.color = 'red';
+                    $('#pNombreValidation').show();
+                }
+            } else {
+                document.getElementById('pNombreValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pNombreValidation').style.color = 'red';
                 nombre.style.border = "1px solid red";
                 $('#pNombreValidation').show();
                 return false;
-            }else{
-                nombre.style.border = "1px solid #d1d3e2";
-                $('#pNombreValidation').hide();
             }
-        }else{
-            document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 10 caracteres';
-            document.getElementById('pNombreValidation').style.color= 'gray';
-            $('#pNombreValidation').show();
+            return true;
         }
-    }else{
-        document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
-        document.getElementById('pNombreValidation').style.color= 'red';
-        nombre.style.border = "1px solid red";
-        $('#pNombreValidation').show();
-        return false;
-    }
-    return true;
-}
 
-function limpiarValidaciones(){
-    nombre = document.formDepartamento.pNombre;
+        function limpiarValidaciones() {
+            nombre = document.formDepartamento.pNombre;
 
-    nombre.style.border = "1px solid #d1d3e2";
+            nombre.style.border = "1px solid #d1d3e2";
 
-    $('#pNombreValidation').hide();
-}
+            $('#pNombreValidation').hide();
+        }
 
-//Funcion del Modal Detalles
-function modalDetalle(IdDepartamento) {
-    //Capturamos los valores de la tabla
-    row_id = "row-"+IdDepartamento;
-    let nombre = $("#"+ row_id + " " + "#Nombre").text();
+        //Funcion del Modal Detalles
+        function modalDetalle(IdDepartamento) {
+            //Capturamos los valores de la tabla
+            row_id = "row-" + IdDepartamento;
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
 
-    $('#tituloModal').text("Detalles del Departamento");
-    $('#btnGuardar').hide();
-    $('#btnActualizar').hide();
-    $('#formDepartamento').trigger("reset");
-    $('#ModalDepartamento').modal('show');
+            $('#tituloModal').text("Detalles del Departamento");
+            $('#btnGuardar').hide();
+            $('#btnActualizar').hide();
+            $('#formDepartamento').trigger("reset");
+            $('#ModalDepartamento').modal('show');
 
-    $( "#pNombre" ).prop( "disabled", true );
-    $('#pIdDepartamento').val(IdDepartamento);
-    $('#pNombre').val(nombre);
-    limpiarValidaciones();
-}
-//Funcion del Modal Actualizar
-function modalActualizar(IdDepartamento) {
-    //Capturamos los valores de la tabla
-    row_id = "row-"+IdDepartamento;
-    let nombre = $("#"+ row_id + " " + "#Nombre").text();
+            $("#pNombre").prop("disabled", true);
+            $('#pIdDepartamento').val(IdDepartamento);
+            $('#pNombre').val(nombre);
+            limpiarValidaciones();
+        }
+        //Funcion del Modal Actualizar
+        function modalActualizar(IdDepartamento) {
+            //Capturamos los valores de la tabla
+            row_id = "row-" + IdDepartamento;
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
 
 
-    $('#tituloModal').text("Actualizar Departamento");
-    $('#btnGuardar').hide();
-    $('#btnActualizar').show();
-    $('#formDepartamento').trigger("reset");
-    $('#ModalDepartamento').modal('show');
-    $( "#pNombre" ).prop( "disabled", false );
-    $('#pIdDepartamento').val(IdDepartamento);
-    $('#pNombre').val(nombre);
-    limpiarValidaciones();
-}
-//Mandar a actualizar los datos
-$('#btnActualizar').click(function(e) {
-    e.preventDefault();
+            $('#tituloModal').text("Actualizar Departamento");
+            $('#btnGuardar').hide();
+            $('#btnActualizar').show();
+            $('#formDepartamento').trigger("reset");
+            $('#ModalDepartamento').modal('show');
+            $("#pNombre").prop("disabled", false);
+            $('#pIdDepartamento').val(IdDepartamento);
+            $('#pNombre').val(nombre);
+            limpiarValidaciones();
+        }
+        //Mandar a actualizar los datos
+        $('#btnActualizar').click(function(e) {
+            e.preventDefault();
 
-    vali = validation();
+            vali = validation();
 
-    if(vali == true){
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: $('#formDepartamento').serialize(),
-            url: "{{ route('departamentos.update') }}",
-            type: "POST",
-            dataType: 'json',
-            success: function(data) {
-                let response = data.success;
-                $('#formDepartamento').trigger("reset");
-                $('#ModalDepartamento').modal('hide');
-                swal_success(response);
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
-            },
-            error: function(data) {
-                elem = document.formDepartamento.pNombre;
-                if(elem.value == ""){
-                    elem.style.border = "1px solid red";
-                    $('#pNombreValidation').show();
-                };
-                swal_error();
+            if (vali == true) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formDepartamento').serialize(),
+                    url: "{{ route('departamentos.update') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        let response = data.success;
+                        $('#formDepartamento').trigger("reset");
+                        $('#ModalDepartamento').modal('hide');
+                        swal_success(response);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        elem = document.formDepartamento.pNombre;
+                        if (elem.value == "") {
+                            elem.style.border = "1px solid red";
+                            $('#pNombreValidation').show();
+                        };
+                        swal_error();
+                    }
+                });
+            } else {
+                validation();
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
             }
         });
-    }else{
-        validation();
-        swal_error();
-    }
-});
 
 
 
 
-//Funcion para eliminar
-function eliminar(id) {
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: "Esta acción no es reversible",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, eliminar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                data: {
-                    IdDepartamento: id
-                },
-                url: "{{ route('departamentos.delete') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    Swal.fire(
-                        'Eliminado!',
-                        data.success,
-                        'success'
-                    )
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000)
-                },
-                error: function(data) {
-                    swal_error();
+        //Funcion para eliminar
+        function eliminar(id) {
+            Swal.fire({
+                title: '¿Está seguro?',
+                text: "Esta acción no es reversible",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, eliminar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "POST",
+                        data: {
+                            IdDepartamento: id
+                        },
+                        url: "{{ route('departamentos.delete') }}",
+                        type: "POST",
+                        dataType: 'json',
+                        success: function(data) {
+                            Swal.fire(
+                                'Eliminado!',
+                                data.success,
+                                'success'
+                            )
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000)
+                        },
+                        error: function(data) {
+                            swal_error();
+                        }
+                    });
                 }
-            });
+            })
         }
-    })
-}
-</script>
+    </script>
 @stop

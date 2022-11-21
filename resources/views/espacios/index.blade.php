@@ -266,7 +266,6 @@
                 $("#capacidadValidar").hide();
                 validar = true;
             }
-
         }
         //Modal de guardar
         $('#crearEspacio').click(function() {

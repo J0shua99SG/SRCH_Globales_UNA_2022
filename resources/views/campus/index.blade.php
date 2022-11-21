@@ -69,22 +69,22 @@
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
                                     placeholder="Escriba el nombre" onkeyup="validation()" minlength="3" maxlength="50"
                                     required>
-                                <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
+                                <span style="color: red" id="pNombreValidation">Campo requerido</span></br>
                                 <label for="">Sede</label>
                                 <input type="text" name="pSede" class="form-control" id="pSede"
                                     placeholder="Escriba la sede" onkeyup="validation()" minlength="3" maxlength="50"
                                     required>
-                                <small style="color: red" id="pSedeValidation">Campo requerido</small></br>
+                                <span style="color: red" id="pSedeValidation">Campo requerido</span></br>
                                 <label for="">Dirección del campus</label>
                                 <input type="text" name="pDireccion" class="form-control" id="pDireccion"
                                     placeholder="Escriba la dirección" onkeyup="validation()" minlength="3" maxlength="100"
                                     required>
-                                <small style="color: red" id="pDireccionValidation">Campo requerido</small></br>
+                                <span style="color: red" id="pDireccionValidation">Campo requerido</span></br>
                                 <label for="">Teléfono del campus</label>
                                 <input type="number" name="pTelefono" class="form-control" id="pTelefono"
                                     placeholder="Escriba teléfono" onkeyup="validation()" min="1" max="99999999"
                                     required>
-                                <small style="color: red" id="pTelefonoValidation">Campo requerido</small></br>
+                                <span style="color: red" id="pTelefonoValidation">Campo requerido</span></br>
                                 <input type="hidden" name="pIdCampus" id="pIdCampus" value="">
                             </div>
                         </form>
@@ -105,6 +105,7 @@
 
     <script>
         var table = $('#dataTable');
+        var validar = true;
 
 
         // success alert
@@ -142,32 +143,43 @@
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formCampus').serialize(),
-                url: "{{ route('campus.guardar') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    let response = data.success;
-                    $('#formCampus').trigger("reset");
-                    $('#ModalCampus').modal('hide');
-                    swal_success(response);
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                }
-            });
+            validation();
+            if (validar == true) {
+                e.preventDefault();
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formCampus').serialize(),
+                    url: "{{ route('campus.guardar') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        let response = data.success;
+                        $('#formCampus').trigger("reset");
+                        $('#ModalCampus').modal('hide');
+                        swal_success(response);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
+            }
         });
 
         //Validación: Cuando cambie el valor y mostrar mensages
         function validation() {
+            validar = true;
             nombre = document.formCampus.pNombre;
             sede = document.formCampus.pSede;
             direccion = document.formCampus.pDireccion;
@@ -187,7 +199,7 @@
                 document.getElementById('pNombreValidation').style.color = 'red';
                 nombre.style.border = "1px solid red";
                 $('#pNombreValidation').show();
-                return false;
+                validar = false;
             }
             if (sede.value != "") {
                 if (sede.value.length < 50) {
@@ -203,7 +215,7 @@
                 document.getElementById('pSedeValidation').style.color = 'red';
                 sede.style.border = "1px solid red";
                 $('#pSedeValidation').show();
-                return false;
+                validar = false;
             }
             if (direccion.value != "") {
                 if (direccion.value.length < 100) {
@@ -219,7 +231,7 @@
                 document.getElementById('pDireccionValidation').style.color = 'red';
                 direccion.style.border = "1px solid red";
                 $('#pDireccionValidation').show();
-                return false;
+                validar = false;
             }
             if (telefono.value != "") {
                 if (telefono.value.length < 20) {
@@ -235,9 +247,8 @@
                 document.getElementById('pTelefonoValidation').style.color = 'red';
                 telefono.style.border = "1px solid red";
                 $('#pTelefonoValidation').show();
-                return false;
+                validar = false;
             }
-            return true;
         }
 
         function limpiarValidaciones() {
@@ -311,28 +322,39 @@
         }
         //Mandar a actualizar los datos
         $('#btnActualizar').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formCampus').serialize(),
-                url: "{{ route('campus.update') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    let response = data.success;
-                    $('#formCampus').trigger("reset");
-                    $('#ModalCampus').modal('hide');
-                    swal_success(response);
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
-                },
-                error: function(data) {
-                    swal_error();
-                }
-            });
+            validation();
+            if (validar == true) {
+                e.preventDefault();
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formCampus').serialize(),
+                    url: "{{ route('campus.update') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        let response = data.success;
+                        $('#formCampus').trigger("reset");
+                        $('#ModalCampus').modal('hide');
+                        swal_success(response);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                    }
+                });
+
+            } else {
+                Swal.fire({
+                    position: 'centered',
+                    icon: 'error',
+                    title: 'Complete los campos!',
+                    showConfirmButton: true,
+                })
+            }
         });
 
         //Funcion para eliminar
