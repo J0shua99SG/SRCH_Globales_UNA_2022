@@ -98,7 +98,7 @@
     
         <!-- Page level custom scripts -->
         <script src="../../../js/demo/datatables-demo.js"></script>
-    
+    <script src="https://cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json"></script>
 
 </body>
 

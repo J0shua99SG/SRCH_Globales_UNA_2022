@@ -29,32 +29,37 @@
                                 <tr id="row-{{ $espacio->IdEspacio }}">
                                     <td id="id">{{ $espacio->IdEspacio }}</td>
                                     @foreach ($edificios as $edificio)
-                                    @if ($espacio->IdEdificio == $edificio->IdEdificio)
-                                    <td >{{ $edificio->Nombre }}
-                                    <input type="hidden" id="IdEdificio" value="{{$espacio->IdEdificio}}"></td>
-                                    @endif
+                                        @if ($espacio->IdEdificio == $edificio->IdEdificio)
+                                            <td>{{ $edificio->Nombre }}
+                                                <input type="hidden" id="IdEdificio" value="{{ $espacio->IdEdificio }}">
+                                            </td>
+                                        @endif
                                     @endforeach
 
                                     @foreach ($tipoespacios as $tipoespacio)
-                                    @if ($espacio->IdTipoEspacio == $tipoespacio->IdTipoEspacio)
-                                    <td>{{ $tipoespacio->Nombre }}
-                                        <input type="hidden" id="IdTipoEspacio" value="{{$espacio->IdTipoEspacio}}"></td>
-                                    @endif
+                                        @if ($espacio->IdTipoEspacio == $tipoespacio->IdTipoEspacio)
+                                            <td>{{ $tipoespacio->Nombre }}
+                                                <input type="hidden" id="IdTipoEspacio"
+                                                    value="{{ $espacio->IdTipoEspacio }}">
+                                            </td>
+                                        @endif
                                     @endforeach
                                     @foreach ($departamento as $departamentos)
-                                    @if ($espacio->IdDepartamento == $departamentos->IdDepartamento)
-                                    <td>{{ $departamentos->Nombre }}
-                                        <input type="hidden" id="IdDepartamento" value="{{$espacio->IdDepartamento}}"></td>
-                                    @endif
+                                        @if ($espacio->IdDepartamento == $departamentos->IdDepartamento)
+                                            <td>{{ $departamentos->Nombre }}
+                                                <input type="hidden" id="IdDepartamento"
+                                                    value="{{ $espacio->IdDepartamento }}">
+                                            </td>
+                                        @endif
                                     @endforeach
                                     <td id="nombre">{{ $espacio->Nombre }}</td>
                                     <td id="Planta">{{ $espacio->Planta }}</td>
                                     <td id="CapacidadMAx">{{ $espacio->CapacidadMAx }}</td>
-                                    @if ($espacio->EstadoEspacio ==1)
-                                    <td id="Estado"  value="{{$espacio->EstadoEspacio}}">Habilitado</td>
+                                    @if ($espacio->EstadoEspacio == 1)
+                                        <td id="Estado" value="{{ $espacio->EstadoEspacio }}">Habilitado</td>
                                     @endif
                                     @if ($espacio->EstadoEspacio == 0)
-                                    <td id="Estado" value="{{$espacio->EstadoEspacio}}">Desabilitado</td>
+                                        <td id="Estado" value="{{ $espacio->EstadoEspacio }}">Desabilitado</td>
                                     @endif
                                     <td>
                                         <button class="btn btn-sm btn-icon btn-outline-success btn-circle mr-2"
@@ -92,45 +97,54 @@
                         <form id="formEspacio" name="formEspacio">
                             <div class="form-group">
                                 <label for="">Edificio</label>
-                                <select class="form-control" name="pIdEdificio" id="pIdEdificio">
-                                    <option value="1">Seleccionar edificio</option>
+                                <select class="form-control" name="pIdEdificio" id="pIdEdificio" required>
+                                    <option value="">Seleccionar edificio</option>
                                     @foreach ($edificios as $edificio)
                                         <option value="{{ $edificio->IdEdificio }}">{{ $edificio->Nombre }}</option>
                                     @endforeach
                                 </select>
                                 <label for="">Tipo de Espacio</label>
-                                <select class="form-control" name="pIdTipoEspacio" id="pIdTipoEspacio">
-                                    <option value="1">Seleccionar tipo de espacio</option>
+                                <select class="form-control" name="pIdTipoEspacio" id="pIdTipoEspacio" required>
+                                    <option value="">Seleccionar tipo de espacio</option>
                                     @foreach ($tipoespacios as $tipoespacio)
-                                        <option value="{{ $tipoespacio->IdTipoEspacio }}">{{ $tipoespacio->Nombre }}</option>
+                                        <option value="{{ $tipoespacio->IdTipoEspacio }}">{{ $tipoespacio->Nombre }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <label for="">Departamento</label>
-                                <select class="form-control" name="pIdDepartamento" id="pIdDepartamento">
-                                    <option value="1">Seleccionar departamento</option>
+                                <select class="form-control" name="pIdDepartamento" id="pIdDepartamento" required>
+                                    <option value="">Seleccionar departamento</option>
                                     @foreach ($departamento as $departamentos)
-                                        <option value="{{ $departamentos->IdDepartamento }}">{{ $departamentos->Nombre }}</option>
+                                        <option value="{{ $departamentos->IdDepartamento }}">{{ $departamentos->Nombre }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <label for="">Nombre</label>
-                                <input type="text" name="pNombre" class="form-control" id="pNombre"
-                                placeholder="Escriba el nombre">
+                                <input type="text" name="pNombre" class="form-control" id="pNombre" placeholder="Escriba el nombre" minlength="1" maxlength="50"
+                                    required>
+                                    <span style="color:red; display:none;" id="nombreValidar">Campo requerido</span><br>
                                 <label for="">Planta</label>
                                 <input type="number" name="pPlanta" class="form-control" id="pPlanta"
-                                placeholder="Escriba la planta">
+                                    placeholder="Escriba la planta" min="1" max="10" required>
+                                    <span style="color:red; display:none;" id="plantaValidar">Campo requerido</span><br>
                                 <label for="">Capacidad Maxima</label>
                                 <input type="number" name="pCapacidadMax" class="form-control" id="pCapacidadMax"
-                                placeholder="Escriba la capacidad maxima">
+                                    placeholder="Escriba la capacidad maxima" min="1"
+                                    max="999" required>
+                                    <span style="color:red; display:none;" id="capacidadValidar">Campo requerido</span><br>
                                 <label for="">Estado</label>
                                 <div style="display: flex; justify-content: space-around;">
                                     <div>
-                                     <span>habilitado </span><input type="radio" class="form-control" id="pEstadoEspacio1" name="pEstadoEspacio" value="1">
+                                        <span>habilitado </span><input type="radio" class="form-control"
+                                            id="pEstadoEspacio1" name="pEstadoEspacio" value="1" checked>
                                     </div>
                                     <div>
-                                        <span>Desabilitado</span><input type="radio" class="form-control" id="pEstadoEspacio0" name="pEstadoEspacio" value="0">
+                                        <span>Desabilitado</span><input type="radio" class="form-control"
+                                            id="pEstadoEspacio0" name="pEstadoEspacio" value="0">
                                     </div>
 
                                 </div>
+                                <span id="estadoValidar" style="color:red; display:none;">Seleccione un estado</span>
                                 <input type="hidden" name="pIdEspacio" id="pIdEspacio" value="">
                             </div>
                         </form>
@@ -151,13 +165,14 @@
 
     <script>
         var table = $('#dataTable');
+        var validar = true;
 
         // success alert
-        function swal_success() {
+        function swal_success(response) {
             Swal.fire({
-                position: 'top-end',
+                position: 'centered',
                 icon: 'success',
-                title: 'Accion realizada con exito!',
+                title: response,
                 showConfirmButton: false,
                 timer: 1000
             })
@@ -170,6 +185,88 @@
                 title: 'Ocurrio un error!',
                 showConfirmButton: true,
             })
+        }
+        function limpiarValidaciones(){
+            $("#pNombre").css({"border": "1px solid #d1d3e2" });
+            $("#pCapacidadMax").css({"border": "1px solid #d1d3e2" });
+            $("#pPlanta").css({"border": "1px solid #d1d3e2" });
+            $("#pIdEdificio").css({"border": "1px solid #d1d3e2" });
+            $("#pIdTipoEspacio").css({"border": "1px solid #d1d3e2" });
+            $("#pIdDepartamento").css({"border": "1px solid #d1d3e2" });
+            $("#nombreValidar").hide();
+            $("#plantaValidar").hide();
+            $("#capacidadValidar").hide();
+        }
+
+        function validaciones() {
+            validar = true;
+            let nombre = $("#pNombre").val();
+            let capacidad = $("#pCapacidadMax").val();
+            let planta = $("#pPlanta").val();
+            let edificio = $("#pIdEdificio").val();
+            let tipoEspacio = $("#pIdTipoEspacio").val();
+            let departamento = $("#pIdDepartamento").val();
+
+
+            if(departamento == ""){
+                $("#pIdDepartamento").css({"border": "1px solid red" });
+                validar = false;
+            }else{
+                $("#pIdDepartamento").css({"border": "1px solid green" });
+                validar = true;
+            }
+            if(tipoEspacio == ""){
+                $("#pIdTipoEspacio").css({"border": "1px solid red" });
+                validar = false;
+            }else{
+                $("#pIdTipoEspacio").css({"border": "1px solid green" });
+                validar = true;
+            }
+            if(edificio == ""){
+                $("#pIdEdificio").css({"border": "1px solid red" });
+                validar = false;
+            }else{
+                $("#pIdEdificio").css({"border": "1px solid green" });
+                validar = true;
+            }
+
+            if (nombre.length == "") {
+                $("#pNombre").css({"border": "1px solid red" });
+                $("#nombreValidar").show();
+                validar = false;
+            }
+
+            if (planta == "") {
+                $("#pPlanta").css({"border": "1px solid red" });
+                $("#plantaValidar").show()
+                validar = false;
+            }
+            if( 0 >= planta || planta > 10 ){
+                $("#pPlanta").css({"border": "1px solid red" });
+                $("#plantaValidar").text("Capacidad deber ser minimo 1 y maximo 10");
+                $("#plantaValidar").show();
+                validar = false;
+            }else{
+                $("#pPlanta").css({"border": "1px solid green" });
+                $("#plantaValidar").hide();
+                validar = true;
+            }
+            if (capacidad == "") {
+                $("#pCapacidadMax").css({"border": "1px solid red" });
+                $("#capacidadValidar").show()
+                validar = false;
+            }
+            if( 0 >= capacidad || capacidad > 999 ){
+                $("#pCapacidadMax").css({"border": "1px solid red" });
+                $("#capacidadValidar").text("Capacidad deber ser minimo 1 y maximo 999");
+                $("#capacidadValidar").show();
+                validar = false;
+            }else{
+                $("#pCapacidadMax").css({"border": "1px solid green" });
+                $("#capacidadValidar").hide();
+                validar = true;
+            }
+
         }
         //Modal de guardar
         $('#crearEspacio').click(function() {
@@ -186,33 +283,40 @@
             $("#pCapacidadMax").prop("disabled", false);
             $("#pEstadoEspacio1").prop("disabled", false);
             $("#pEstadoEspacio0").prop("disabled", false);
+            limpiarValidaciones();
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: $('#formEspacio').serialize(),
-                url: "{{ route('espacios.guardar') }}",
-                type: "POST",
-                dataType: 'json',
-                success: function(data) {
-                    $('#formEspacio').trigger("reset");
-                    $('#ModalEspacio').modal('hide');
-                    swal_success();
-                    setTimeout(function() {
+            validaciones();
+            if (validar == true) {
+                e.preventDefault();
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: $('#formEspacio').serialize(),
+                    url: "{{ route('espacios.guardar') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        let response = data.success;
+                        $('#formEspacio').trigger("reset");
+                        $('#ModalEspacio').modal('hide');
+                        swal_success(response);
+                        setTimeout(function() {
                         location.reload();
-                    }, 2000); 
-                },
-                error: function(data) {
-                    swal_error();
-                }
-            });
+                    }, 2000);
+                    },
+                    error: function(data) {
+                        swal_error();
+                    }
+                });
+            }
         });
+
         //Funcion del Modal Detalles
         function modalDetalle(IdEspacio) {
+            limpiarValidaciones();
             //Capturamos los valores de la tabla
             row_id = "row-" + IdEspacio;
             let nombre = $("#" + row_id + " " + "#nombre").text();
@@ -246,16 +350,17 @@
             $('#pPlanta').val(Planta);
             $('#pCapacidadMax').val(CapacidadMAx);
 
-            if(Estado == "Habilitado"){
+            if (Estado == "Habilitado") {
                 $("#pEstadoEspacio1").prop("checked", true);
             }
-            if(Estado == "Desabilitado"){
+            if (Estado == "Desabilitado") {
                 $("#pEstadoEspacio0").prop("checked", true);
             }
 
         }
         //Funcion del Modal Actualizar
         function modalActualizar(IdEspacio) {
+            limpiarValidaciones();
             //Capturamos los valores de la tabla
             row_id = "row-" + IdEspacio;
             let nombre = $("#" + row_id + " " + "#nombre").text();
@@ -289,10 +394,10 @@
             $('#pIdEdificio').val(IdEdificio);
             $('#pPlanta').val(Planta);
             $('#pCapacidadMax').val(CapacidadMAx);
-            if(Estado == "Habilitado"){
+            if (Estado == "Habilitado") {
                 $("#pEstadoEspacio1").prop("checked", true);
             }
-            if(Estado == "Desabilitado"){
+            if (Estado == "Desabilitado") {
                 $("#pEstadoEspacio0").prop("checked", true);
             }
         }
@@ -310,7 +415,7 @@
                 success: function(data) {
                     $('#formEspacio').trigger("reset");
                     $('#ModalEspacio').modal('hide');
-                    swal_success();
+                    swal_success(data.success);
                     setTimeout(function() {
                         location.reload();
                     }, 2000);
@@ -350,7 +455,7 @@
                         success: function(data) {
                             Swal.fire(
                                 'Eliminado!',
-                                'Se completo la acción',
+                                data.success,
                                 'success'
                             )
                             setTimeout(function() {

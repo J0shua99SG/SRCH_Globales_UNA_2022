@@ -37,7 +37,8 @@
                                         <button class="btn btn-sm btn-icon btn-outline-danger btn-circle mr-2"
                                             onclick="eliminar({{ $campu->IdCampus }})"><i
                                                 class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2" onclick="modalDetalle({{ $campu->IdCampus }})"><i
+                                        <button class="btn btn-sm btn-icon btn-outline-primary btn-circle mr-2"
+                                            onclick="modalDetalle({{ $campu->IdCampus }})"><i
                                                 class="fas
                                             fa-eye"></i></button>
 
@@ -66,20 +67,24 @@
                             <div class="form-group">
                                 <label for="">Nombre del campus</label>
                                 <input type="text" name="pNombre" class="form-control" id="pNombre"
-                                    placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
-                                    <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
+                                    placeholder="Escriba el nombre" onkeyup="validation()" minlength="3" maxlength="50"
+                                    required>
+                                <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                                 <label for="">Sede</label>
                                 <input type="text" name="pSede" class="form-control" id="pSede"
-                                    placeholder="Escriba la sede" onkeyup="validation()" maxlength="50">
-                                    <small style="color: red" id="pSedeValidation">Campo requerido</small></br>
+                                    placeholder="Escriba la sede" onkeyup="validation()" minlength="3" maxlength="50"
+                                    required>
+                                <small style="color: red" id="pSedeValidation">Campo requerido</small></br>
                                 <label for="">Dirección del campus</label>
                                 <input type="text" name="pDireccion" class="form-control" id="pDireccion"
-                                    placeholder="Escriba la dirección" onkeyup="validation()" maxlength="100">
-                                    <small style="color: red" id="pDireccionValidation">Campo requerido</small></br>
+                                    placeholder="Escriba la dirección" onkeyup="validation()" minlength="3" maxlength="100"
+                                    required>
+                                <small style="color: red" id="pDireccionValidation">Campo requerido</small></br>
                                 <label for="">Teléfono del campus</label>
                                 <input type="number" name="pTelefono" class="form-control" id="pTelefono"
-                                    placeholder="Escriba teléfono" onkeyup="validation()" maxlength="20">
-                                    <small style="color: red" id="pTelefonoValidation">Campo requerido</small></br>
+                                    placeholder="Escriba teléfono" onkeyup="validation()" min="1" max="99999999"
+                                    required>
+                                <small style="color: red" id="pTelefonoValidation">Campo requerido</small></br>
                                 <input type="hidden" name="pIdCampus" id="pIdCampus" value="">
                             </div>
                         </form>
@@ -94,19 +99,20 @@
         </div>
         <!-- Modal-->
     </div>
-    
+
     <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
         integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous"></script>
 
     <script>
         var table = $('#dataTable');
 
+
         // success alert
-        function swal_success() {
+        function swal_success(response) {
             Swal.fire({
-                position: 'top-end',
+                position: 'centered',
                 icon: 'success',
-                title: 'Accion realizada con exito!',
+                title: response,
                 showConfirmButton: false,
                 timer: 1000
             })
@@ -116,10 +122,11 @@
             Swal.fire({
                 position: 'centered',
                 icon: 'error',
-                title: 'Ocurrio un error!',
+                title: 'Ha ocurrido un error',
                 showConfirmButton: true,
             })
         }
+
         //Modal de guardar
         $('#crearCampus').click(function() {
             $('#tituloModal').text("Registrar Campus");
@@ -128,10 +135,10 @@
             limpiarValidaciones();
             $('#formCampus').trigger("reset");
             $('#ModalCampus').modal('show');
-            $( "#pNombre" ).prop( "disabled", false );
-            $( "#pSede" ).prop( "disabled", false );
-            $( "#pDireccion" ).prop( "disabled", false );
-            $( "#pTelefono" ).prop( "disabled", false );
+            $("#pNombre").prop("disabled", false);
+            $("#pSede").prop("disabled", false);
+            $("#pDireccion").prop("disabled", false);
+            $("#pTelefono").prop("disabled", false);
         });
         //Mandar a guardar los datos
         $('#btnGuardar').click(function(e) {
@@ -145,16 +152,16 @@
                 type: "POST",
                 dataType: 'json',
                 success: function(data) {
+                    let response = data.success;
                     $('#formCampus').trigger("reset");
                     $('#ModalCampus').modal('hide');
-                    swal_success();
+                    swal_success(response);
                     setTimeout(function() {
                         location.reload();
                     }, 2000);
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnGuardar').html('Error');
                 }
             });
         });
@@ -165,67 +172,67 @@
             sede = document.formCampus.pSede;
             direccion = document.formCampus.pDireccion;
             telefono = document.formCampus.pTelefono;
-            
-            if(nombre.value != ""){
-                if(nombre.value.length < 50){
+
+            if (nombre.value != "") {
+                if (nombre.value.length < 50) {
                     nombre.style.border = "1px solid #d1d3e2";
                     $('#pNombreValidation').hide();
-                }else{
-                    document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
-                    document.getElementById('pNombreValidation').style.color= 'gray';
+                } else {
+                    document.getElementById('pNombreValidation').innerHTML = 'Solo se admiten 50 caracteres';
+                    document.getElementById('pNombreValidation').style.color = 'gray';
                     $('#pNombreValidation').show();
                 }
-            }else{
-                document.getElementById('pNombreValidation').innerHTML= 'Campo requerido';
-                document.getElementById('pNombreValidation').style.color= 'red';
+            } else {
+                document.getElementById('pNombreValidation').innerHTML = 'Campo requerido';
+                document.getElementById('pNombreValidation').style.color = 'red';
                 nombre.style.border = "1px solid red";
                 $('#pNombreValidation').show();
                 return false;
             }
-            if(sede.value != ""){
-                if(sede.value.length < 50){
+            if (sede.value != "") {
+                if (sede.value.length < 50) {
                     sede.style.border = "1px solid #d1d3e2";
                     $('#pSedeValidation').hide();
-                }else{
-                    document.getElementById('pSedeValidation').innerHTML= 'Solo se admiten 50 caracteres';
-                    document.getElementById('pSedeValidation').style.color= 'gray';
+                } else {
+                    document.getElementById('pSedeValidation').innerHTML = 'Solo se admiten 50 caracteres';
+                    document.getElementById('pSedeValidation').style.color = 'gray';
                     $('#pSedeValidation').show();
                 }
-            }else{
+            } else {
                 document.getElementById('pSedeValidation').innerHTML = 'Campo requerido';
-                document.getElementById('pSedeValidation').style.color= 'red';
+                document.getElementById('pSedeValidation').style.color = 'red';
                 sede.style.border = "1px solid red";
                 $('#pSedeValidation').show();
                 return false;
             }
-            if(direccion.value != ""){
-                if(direccion.value.length < 100){
+            if (direccion.value != "") {
+                if (direccion.value.length < 100) {
                     direccion.style.border = "1px solid #d1d3e2";
                     $('#pDireccionValidation').hide();
-                }else{
-                    document.getElementById('pDireccionValidation').innerHTML= 'Solo se admiten 100 caracteres';
-                    document.getElementById('pDireccionValidation').style.color= 'gray';
+                } else {
+                    document.getElementById('pDireccionValidation').innerHTML = 'Solo se admiten 100 caracteres';
+                    document.getElementById('pDireccionValidation').style.color = 'gray';
                     $('#pDireccionValidation').show();
                 }
-            }else{
+            } else {
                 document.getElementById('pDireccionValidation').innerHTML = 'Campo requerido';
-                document.getElementById('pDireccionValidation').style.color= 'red';
+                document.getElementById('pDireccionValidation').style.color = 'red';
                 direccion.style.border = "1px solid red";
                 $('#pDireccionValidation').show();
                 return false;
             }
-            if(telefono.value != ""){
-                if(telefono.value.length < 20){
+            if (telefono.value != "") {
+                if (telefono.value.length < 20) {
                     telefono.style.border = "1px solid #d1d3e2";
                     $('#pTelefonoValidation').hide();
-                }else{
-                    document.getElementById('pTelefonoValidation').innerHTML= 'Solo se admiten 20 caracteres';
-                    document.getElementById('pTelefonoValidation').style.color= 'gray';
+                } else {
+                    document.getElementById('pTelefonoValidation').innerHTML = 'Solo se admiten 20 caracteres';
+                    document.getElementById('pTelefonoValidation').style.color = 'gray';
                     $('#pTelefonoValidation').show();
                 }
-            }else{
+            } else {
                 document.getElementById('pTelefonoValidation').innerHTML = 'Campo requerido';
-                document.getElementById('pTelefonoValidation').style.color= 'red';
+                document.getElementById('pTelefonoValidation').style.color = 'red';
                 telefono.style.border = "1px solid red";
                 $('#pTelefonoValidation').show();
                 return false;
@@ -233,7 +240,7 @@
             return true;
         }
 
-        function limpiarValidaciones(){
+        function limpiarValidaciones() {
             nombre = document.formCampus.pNombre;
             sede = document.formCampus.pSede
             direccion = document.formCampus.pDireccion;
@@ -243,7 +250,7 @@
             sede.style.border = "1px solid #d1d3e2";
             direccion.style.border = "1px solid #d1d3e2";
             telefono.style.border = "1px solid #d1d3e2";
-            
+
             $('#pNombreValidation').hide();
             $('#pSedeValidation').hide();
             $('#pDireccionValidation').hide();
@@ -253,11 +260,11 @@
         //Funcion del Modal Detalles
         function modalDetalle(IdCampus) {
             //Capturamos los valores de la tabla
-            row_id = "row-"+IdCampus;
-            let nombre = $("#"+ row_id + " " + "#Nombre").text();
-            let sede = $("#"+ row_id + " " + "#Sede").text();
-            let direccion = $("#"+ row_id + " " + "#Direccion").text();
-            let telefono = $("#"+ row_id + " " + "#Telefono").text();
+            row_id = "row-" + IdCampus;
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
+            let sede = $("#" + row_id + " " + "#Sede").text();
+            let direccion = $("#" + row_id + " " + "#Direccion").text();
+            let telefono = $("#" + row_id + " " + "#Telefono").text();
 
             $('#tituloModal').text("Detalles del Campus");
             $('#btnGuardar').hide();
@@ -266,10 +273,10 @@
             $('#formCampus').trigger("reset");
             $('#ModalCampus').modal('show');
 
-            $( "#pNombre" ).prop( "disabled", true );
-            $( "#pSede" ).prop( "disabled", true );
-            $( "#pDireccion" ).prop( "disabled", true );
-            $( "#pTelefono" ).prop( "disabled", true );
+            $("#pNombre").prop("disabled", true);
+            $("#pSede").prop("disabled", true);
+            $("#pDireccion").prop("disabled", true);
+            $("#pTelefono").prop("disabled", true);
 
             $('#pIdCampus').val(IdCampus);
             $('#pNombre').val(nombre);
@@ -280,11 +287,11 @@
         //Funcion del Modal Actualizar
         function modalActualizar(IdCampus) {
             //Capturamos los valores de la tabla
-            row_id = "row-"+IdCampus;
-            let nombre = $("#"+ row_id + " " + "#Nombre").text();
-            let sede = $("#"+ row_id + " " + "#Sede").text();
-            let direccion = $("#"+ row_id + " " + "#Direccion").text();
-            let telefono = $("#"+ row_id + " " + "#Telefono").text();
+            row_id = "row-" + IdCampus;
+            let nombre = $("#" + row_id + " " + "#Nombre").text();
+            let sede = $("#" + row_id + " " + "#Sede").text();
+            let direccion = $("#" + row_id + " " + "#Direccion").text();
+            let telefono = $("#" + row_id + " " + "#Telefono").text();
 
             $('#tituloModal').text("Actualizar Campus");
             $('#btnGuardar').hide();
@@ -292,10 +299,10 @@
             $('#formCampus').trigger("reset");
             $('#ModalCampus').modal('show');
             limpiarValidaciones();
-            $( "#pNombre" ).prop( "disabled", false );
-            $( "#pSede" ).prop( "disabled", false );
-            $( "#pDireccion" ).prop( "disabled", false );
-            $( "#pTelefono" ).prop( "disabled", false );
+            $("#pNombre").prop("disabled", false);
+            $("#pSede").prop("disabled", false);
+            $("#pDireccion").prop("disabled", false);
+            $("#pTelefono").prop("disabled", false);
             $('#pIdCampus').val(IdCampus);
             $('#pNombre').val(nombre);
             $('#pSede').val(sede);
@@ -314,22 +321,19 @@
                 type: "POST",
                 dataType: 'json',
                 success: function(data) {
+                    let response = data.success;
                     $('#formCampus').trigger("reset");
                     $('#ModalCampus').modal('hide');
-                    swal_success();
+                    swal_success(response);
                     setTimeout(function() {
                         location.reload();
                     }, 2000);
                 },
                 error: function(data) {
                     swal_error();
-                    $('#btnActualizar').html('Error');
                 }
             });
         });
-
-
-
 
         //Funcion para eliminar
         function eliminar(id) {
@@ -357,7 +361,7 @@
                         success: function(data) {
                             Swal.fire(
                                 'Eliminado!',
-                                'Se completo la acción',
+                                data.success,
                                 'success'
                             )
                             setTimeout(function() { // wait for 5 secs(2)

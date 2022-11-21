@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <label for="">Nombre del Departamento</label>
                         <input type="text" name="pNombre" class="form-control" id="pNombre"
-                            placeholder="Escriba el nombre" onkeyup="validation()" maxlength="50">
+                            placeholder="Escriba el nombre" onkeyup="validation()" minlength="3" maxlength="50" required>
                         <small style="color: red" id="pNombreValidation">Campo requerido</small></br>
                         <input type="hidden" name="pIdDepartamento" id="pIdDepartamento" value="">
                     </div>
@@ -82,26 +82,25 @@ integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="ano
 <script>
 var table = $('#dataTable');
 
-// success alert
-function swal_success() {
-    Swal.fire({
-        position: 'centered',
-        icon: 'success',
-        title: '¡Acción realizada con éxito!',
-        showConfirmButton: false,
-        timer: 1000
-    })
-}
-
-// error alert
-function swal_error() {
-    Swal.fire({
-        position: 'centered',
-        icon: 'error',
-        title: 'Ha ocurrido un error',
-        showConfirmButton: true,
-    })
-}
+        // success alert
+        function swal_success(response) {
+            Swal.fire({
+                position: 'centered',
+                icon: 'success',
+                title: response,
+                showConfirmButton: false,
+                timer: 1000
+            })
+        }
+        // error alert
+        function swal_error() {
+            Swal.fire({
+                position: 'centered',
+                icon: 'error',
+                title: 'Ha ocurrido un error',
+                showConfirmButton: true,
+            })
+        }
 
 //Modal de guardar
 $('#crearDepartamento').click(function() {
@@ -128,9 +127,10 @@ $('#btnGuardar').click(function(e) {
             type: "POST",
             dataType: 'json',
             success: function(data) {
+                let response = data.success;
                 $('#formDepartamento').trigger("reset");
                 $('#ModalDepartamento').modal('hide');
-                swal_success();
+                swal_success(response);
                 setTimeout(function() {
                     location.reload();
                 }, 2000);
@@ -151,8 +151,8 @@ function validation() {
     nombre = document.formDepartamento.pNombre;
 
     if(nombre.value != ""){
-        if(nombre.value.length < 50){
-            var AllowRegex  = new RegExp('^[A-Z]+$', 'i');
+        if(nombre.value.length <= 10){
+            var AllowRegex  = new RegExp(/^[A-Za-zZñÑáéíóúÁÉÍÓÚ\s]+$/g);
 
             if(!AllowRegex.test(nombre.value)){
                 document.getElementById('pNombreValidation').innerHTML= 'No se permiten números ni caracteres especiales';
@@ -165,7 +165,7 @@ function validation() {
                 $('#pNombreValidation').hide();
             }
         }else{
-            document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 50 caracteres';
+            document.getElementById('pNombreValidation').innerHTML= 'Solo se admiten 10 caracteres';
             document.getElementById('pNombreValidation').style.color= 'gray';
             $('#pNombreValidation').show();
         }
@@ -237,9 +237,10 @@ $('#btnActualizar').click(function(e) {
             type: "POST",
             dataType: 'json',
             success: function(data) {
+                let response = data.success;
                 $('#formDepartamento').trigger("reset");
                 $('#ModalDepartamento').modal('hide');
-                swal_success();
+                swal_success(response);
                 setTimeout(function() {
                     location.reload();
                 }, 2000);
@@ -288,7 +289,7 @@ function eliminar(id) {
                 success: function(data) {
                     Swal.fire(
                         'Eliminado!',
-                        'Se completo la acción',
+                        data.success,
                         'success'
                     )
                     setTimeout(function() {
