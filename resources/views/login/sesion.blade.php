@@ -22,7 +22,17 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<style>
+    .login{
+        background: url(https://www.chorotega.una.ac.cr/images/RESIDENCIAS/Mesa1%201.jpg) !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+    }
+
+
+</style>
+
+<body class="login bg-gradient-primary">
 
     <div class="container">
 
@@ -45,37 +55,29 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                                placeholder="Digite su correo...">
                                         </div>
-                                        <div class="form-group">
+                                       <!-- <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
                                                 id="exampleInputPassword" placeholder="Password">
-                                        </div>
+                                        </div> -->
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
+                                                <label class="custom-control-label" for="customCheck">Recuerdame</label>
                                             </div>
                                         </div>
                                         <a href="/dashboard" class="btn btn-primary btn-user btn-block">
-                                            Login
+                                            Iniciar Sesión
                                         </a>
                                         <hr>
-                                        <a href="/dashboard" class="btn btn-google btn-user btn-block">
-                                            <i class="fab fa-google fa-fw"></i> Login with Google
-                                        </a>
-                                        <a href="/dashboard" class="btn btn-facebook btn-user btn-block">
-                                            <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                                        </a>
                                     </form>
-                                    <hr>
-                                    <div class="text-center">
+                                    <!--<div class="text-center">
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div>
+                                    </div>-->
                                     <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
+                                        <a class="small" href="/registro">Crear Cuenta!</a>
+                                    </div> 
                                 </div>
                             </div>
                         </div>

@@ -104,7 +104,7 @@ Route::post('/usuarios/delete', [UsuariosController::class, 'delete'])->name('us
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::get('/', function () {
-    return view('pages.dashboard');
+    return view('login.sesion');
 });
 
 Route::get('/registro', function () {

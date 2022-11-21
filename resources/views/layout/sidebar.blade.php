@@ -20,7 +20,7 @@
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="/usuarios">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fas fa-users"></i>
                     <span>Usuarios</span></a>
             </li>
 
@@ -33,17 +33,17 @@
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="/campus">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-place-of-worship"></i>
                     <span>Campus</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/edificios">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-building"></i>
                     <span>Edificios</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/departamentos">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-object-ungroup"></i>
                     <span>Departamentos</span></a>
             </li>
             <!-- Divider -->
@@ -52,7 +52,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-check-square"></i>
                     <span>Activos</span>
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
@@ -68,7 +68,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-map-marker-question"></i>
                     <span>Espacios</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -84,12 +84,12 @@
             <hr class="sidebar-divider">
             <li class="nav-item">
                 <a class="nav-link" href="/horarios">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-calendar-week"></i>
                     <span>Horarios</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/actividad">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-calendar-check"></i>
                     <span>Actividad</span></a>
             </li>
 
